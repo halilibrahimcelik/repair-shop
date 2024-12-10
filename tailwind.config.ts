@@ -59,6 +59,30 @@ export default {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      keyframes: {
+        appear: {
+          from: {
+            opacity: '0',
+          },
+          to: {
+            opacity: '1',
+          },
+        },
+        up: {
+          from: {
+            transform: 'translateY(100%)',
+            opacity: '0',
+          },
+          to: {
+            transform: 'translateY(0)',
+            opacity: '1',
+          },
+        },
+      },
+      animation: {
+        appear: 'appear 0.5s ease-in-out',
+        up: 'up 0.5s ease-in-out',
+      },
     },
   },
   plugins: [tailwindcssAnimate],

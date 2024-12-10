@@ -3,6 +3,7 @@ import { HomeIcon, File, UsersRound } from 'lucide-react';
 import NavButton from './NavButton';
 import Link from 'next/link';
 import { ROUTES } from '@/types/default';
+import DarkModeSwitch from './DarkModeSwitch';
 
 const Header = () => {
   return (
@@ -32,6 +33,7 @@ const Header = () => {
             Icon={UsersRound}
             href={ROUTES.CUSTOMERS}
           />
+          <DarkModeSwitch />
         </div>
       </div>
     </header>
