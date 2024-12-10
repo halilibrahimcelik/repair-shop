@@ -13,7 +13,7 @@ body {
   }
   /* Subheading */
   .subheading {
-    @apply text-xl font-semibold sm:text-2xl lg:text-3xl;
+    @apply text-xl font-semibold sm:text-xl lg:text-2xl;
   }
 
   /* Paragraph */
