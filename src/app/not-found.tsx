@@ -3,6 +3,10 @@ import { Card } from '@/components/ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
 
+export const metadata = {
+  title: 'Not Found',
+  description: 'Page not found',
+};
 export default function NotFound() {
   return (
     <div className='mx-auto px-10 py-10 flex justify-center'>
