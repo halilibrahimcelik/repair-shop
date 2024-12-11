@@ -6,6 +6,27 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+@layer components {
+  /* Heading */
+  .heading {
+    @apply text-3xl font-bold sm:text-4xl lg:text-5xl;
+  }
+  /* Subheading */
+  .subheading {
+    @apply text-xl font-semibold sm:text-xl lg:text-2xl;
+  }
+
+  /* Paragraph */
+  .paragraph {
+    @apply text-base leading-relaxed sm:text-lg lg:text-xl;
+  }
+
+  /* Small Text */
+  .small-text {
+    @apply text-sm font-light sm:text-base lg:text-lg;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
