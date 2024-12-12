@@ -24,7 +24,7 @@ const EmailInput: React.FC = () => {
     }
   };
   return (
-    <div className='flex-col w-full gap-2'>
+    <div className='flex-col w-full gap-4 flex'>
       <div>
         <h3 className='subheading mb-1'>Welcome back!</h3>
         <p className='paragraph'>You can sign-in with your email</p>
