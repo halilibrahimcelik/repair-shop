@@ -24,34 +24,41 @@ const EmailInput: React.FC = () => {
     }
   };
   return (
-    <div className='w-full flex-col  md:flex-row md:flex  md:justify-center items-center gap-2 '>
-      <div className='flex gap-2  items-center w-full'>
-        <input
-          value={email}
-          onChange={handleEmailChange}
-          placeholder='Email'
-          className='border rounded-md p-2  block w-full'
-          type='email'
-          id='email'
-          name='email'
-        />
+    <div className='flex-col w-full gap-2'>
+      <div>
+        <h3 className='subheading mb-1'>Welcome back!</h3>
+        <p className='paragraph'>You can sign-in with your email</p>
       </div>
-      <LoginLink
-        className={disabled ? 'cursor-not-allowed pointer-events-none' : ''}
-        authUrlParams={{
-          connection_id: process.env.NEXT_PUBLIC_KINDE_CONNECTION_PASSWORDLESS!,
-          login_hint: email,
-        }}
-      >
-        <Button
-          ref={submitRef}
-          disabled={disabled}
-          type='button'
-          variant={'default'}
+      <div className='w-full flex-col  md:flex-row md:flex  md:justify-center items-center gap-2 '>
+        <div className='flex gap-2  items-center w-full'>
+          <input
+            value={email}
+            onChange={handleEmailChange}
+            placeholder='Email'
+            className='border rounded-md p-2  block w-full'
+            type='email'
+            id='email'
+            name='email'
+          />
+        </div>
+        <LoginLink
+          className={disabled ? 'cursor-not-allowed pointer-events-none' : ''}
+          authUrlParams={{
+            connection_id:
+              process.env.NEXT_PUBLIC_KINDE_CONNECTION_PASSWORDLESS!,
+            login_hint: email,
+          }}
         >
-          Continue
-        </Button>
-      </LoginLink>
+          <Button
+            ref={submitRef}
+            disabled={disabled}
+            type='button'
+            variant={'default'}
+          >
+            Continue
+          </Button>
+        </LoginLink>
+      </div>
     </div>
   );
 };

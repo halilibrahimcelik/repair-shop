@@ -1,7 +1,6 @@
-import { LoginLink } from '@kinde-oss/kinde-auth-nextjs/components';
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import EmailInput from '@/components/login/EmailInput';
+import SocialLinks from '@/components/login/SocialLinks';
 
 const LoginPage = () => {
   return (
@@ -10,6 +9,7 @@ const LoginPage = () => {
         <h1 className='heading mb-3'>Computer Repair Shop</h1>
 
         <EmailInput />
+        <SocialLinks />
         {/* <Button className='text-xl font-bold' asChild>
           <LoginLink
           authUrlParams={{
