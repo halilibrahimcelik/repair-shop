@@ -1,9 +1,11 @@
 import React from 'react';
-import { HomeIcon, File, UsersRound } from 'lucide-react';
+import { HomeIcon, File, UsersRound, LogOut } from 'lucide-react';
 import NavButton from './NavButton';
 import Link from 'next/link';
 import { ROUTES } from '@/types/default';
 import DarkModeSwitch from './DarkModeSwitch';
+import { LogoutLink } from '@kinde-oss/kinde-auth-nextjs/components';
+import { Button } from './ui/button';
 
 const Header = () => {
   return (
@@ -34,6 +36,18 @@ const Header = () => {
             href={ROUTES.CUSTOMERS}
           />
           <DarkModeSwitch />
+          <Button
+            variant='ghost'
+            aria-label='logout'
+            title='logout'
+            className='rounded-full'
+            size={'icon'}
+            asChild
+          >
+            <LogoutLink>
+              <LogOut />
+            </LogoutLink>
+          </Button>
         </div>
       </div>
     </header>

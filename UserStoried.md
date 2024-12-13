@@ -18,5 +18,5 @@
 16. [ ] Employees can only edit their assigned tickets
 17. [ ] Managers and Admins can view, edit, and delete all tickets
 18. [ ] Desktop mode is most important but the app should be usable on tablet devices as well.
-19. [ ] Light / Dark mode option requested by employees
-20. [ ] Expects quick support if anything goes wrong with the app
+19. [x] Light / Dark mode option requested by employees
+20. [x] Expects quick support if anything goes wrong with the app(via Sentry)
