@@ -1,0 +1,20 @@
+name: Unit-Tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Install pnpm
+      - name: Install pnpm
+        run: npm install -g pnpm
+      - name: test
+        run: pnpm test
+      # Set BASE_URL based on the branch
