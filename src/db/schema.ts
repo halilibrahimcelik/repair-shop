@@ -59,3 +59,5 @@ export const ticketsRelations = relations(ticketsTable, ({ one }) => {
     }),
   };
 });
+
+export type Customer = typeof customersTable.$inferInsert;
