@@ -15,6 +15,9 @@ jobs:
       # Install pnpm
       - name: Install pnpm
         run: npm install -g pnpm
+        # Install dependencies
+      - name: Install dependencies
+        run: pnpm install
       - name: test
         run: pnpm test
       # Set BASE_URL based on the branch
