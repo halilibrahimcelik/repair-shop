@@ -10,7 +10,7 @@ export const getCustomer = async (id: number) => {
       .select()
       .from(customersTable)
       .where(eq(customersTable.id, id));
-    return customer[0];
+    return customer[0] || null;
   } catch (error) {
     console.log(error);
     captureSentryException({
