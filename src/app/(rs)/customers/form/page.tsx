@@ -1,5 +1,5 @@
 import { BackButton } from '@/components/BackButton';
-import CustomerForm from '@/components/login/CustomerForm/CustomerForm';
+import CustomerForm from '@/components/forms/CustomerForm';
 import { getCustomer } from '@/lib/queries';
 
 type Props = {

@@ -1,4 +1,5 @@
 import { BackButton } from '@/components/BackButton';
+import TicketsForm from '@/components/forms/TicketsForm';
 import { getTicket, getCustomer } from '@/lib/queries';
 
 type Props = {
@@ -43,6 +44,7 @@ const TicketFormPage: React.FC<Props> = async ({ searchParams }) => {
       return (
         <div>
           <h1>New ticket form for customer id# {customerId} </h1>
+          <TicketsForm customer={customer} />
         </div>
       );
     }
@@ -59,12 +61,13 @@ const TicketFormPage: React.FC<Props> = async ({ searchParams }) => {
         );
       }
 
-      const customer = await getCustomer(ticket.customersId);
-      console.log(customer);
+      const customerX = await getCustomer(ticket.customersId);
+
       //return ticket form
       return (
         <div>
           <h1>Edit ticket form for ticket id# {ticketId} </h1>
+          <TicketsForm customer={customerX!} ticket={ticket} />
         </div>
       );
     }
