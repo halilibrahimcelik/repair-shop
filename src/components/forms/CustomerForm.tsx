@@ -11,6 +11,7 @@ import {
   type SelectCusctomerSchemaType,
   selectCustomerSchema,
 } from '@/zod-schemas/customer';
+import InputWithLabel from '../inputs/InputWithLabel';
 
 type Props = {
   customer?: SelectCusctomerSchemaType;
@@ -21,6 +22,7 @@ const CustomerForm: React.FC<Props> = ({ customer }) => {
     firstName: customer?.firstName || '',
     lastName: customer?.lastName || '',
     address1: customer?.address1 || '',
+    address2: customer?.address2 || '',
     city: customer?.city || '',
     email: customer?.email || '',
     phone: customer?.phone || '',
@@ -38,16 +40,69 @@ const CustomerForm: React.FC<Props> = ({ customer }) => {
     console.log(data);
   };
   return (
-    <div className='flex flex-col gap-2 sm:px-8'>
+    <div className='flex flex-col gap-2 sm:px-8 max-w-sm md:max-w-xl w-full mx-auto'>
       <div>
         <h2 className='subheading'>{customer?.id ? 'Edit' : 'New'} Customer</h2>
       </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className='flex border p-2 rounded-lg'
+          className='flex flex-col md:flex-row  gap-4 w-full border p-2 rounded-lg'
         >
-          <p>{JSON.stringify(form.getValues())}</p>
+          <div className='flex flex-col gap-2 w-full'>
+            <InputWithLabel<InsertCustomerSchemaType>
+              nameInSchema={'firstName'}
+              fieldTitle='First Name'
+            />
+            <InputWithLabel<InsertCustomerSchemaType>
+              nameInSchema={'lastName'}
+              fieldTitle='Last Name'
+            />
+            <InputWithLabel<InsertCustomerSchemaType>
+              nameInSchema={'address1'}
+              fieldTitle='Address 1'
+            />
+            <InputWithLabel<InsertCustomerSchemaType>
+              nameInSchema={'address2'}
+              fieldTitle='Address 2'
+            />
+            <InputWithLabel<InsertCustomerSchemaType>
+              nameInSchema={'city'}
+              fieldTitle='City'
+            />
+          </div>
+          <div className='flex flex-col gap-2 w-full'>
+            <InputWithLabel<InsertCustomerSchemaType>
+              nameInSchema={'phone'}
+              fieldTitle='Phone'
+            />
+            <InputWithLabel<InsertCustomerSchemaType>
+              nameInSchema={'email'}
+              fieldTitle='Email'
+            />
+            <InputWithLabel<InsertCustomerSchemaType>
+              nameInSchema={'postCode'}
+              fieldTitle='Post Code'
+            />
+            <InputWithLabel<InsertCustomerSchemaType>
+              nameInSchema={'state'}
+              fieldTitle='State'
+            />
+            <div className='flex gap-2 my-2'>
+              <Button title='Save' className='w-3/4' type='submit'>
+                Save
+              </Button>
+              <Button
+                onClick={() => {
+                  form.reset(defaultValues);
+                }}
+                className='w-1/4'
+                variant={'destructive'}
+              >
+                Reset
+              </Button>
+            </div>
+          </div>
         </form>
       </Form>
     </div>
