@@ -18,7 +18,7 @@ export const customersTable = pgTable('customers', {
   address1: varchar('address1').notNull(),
   address2: varchar('address2'),
   city: varchar('city').notNull(),
-  state: varchar('state', { length: 2 }).notNull(),
+  state: varchar('state', { length: 40 }).notNull(),
   postCode: varchar('post_code', { length: 10 }).notNull(),
   notes: text(),
   active: boolean().notNull().default(true),

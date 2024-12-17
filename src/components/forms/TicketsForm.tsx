@@ -8,10 +8,13 @@ import { Button } from '@/components/ui/button';
 import {
   SelectTicketSchemaType,
   InsertTicketSchemaType,
-  selectTicketSchema,
   insertTicketSchema,
 } from '@/zod-schemas/tickets';
+import InputWithLabel from '../inputs/InputWithLabel';
+import TextAreaWithLabel from '../inputs/TextAreaWithLabel';
+import SelectWithLabel from '../inputs/SelectWithLabel';
 import { SelectCusctomerSchemaType } from '@/zod-schemas/customer';
+import CheckboxWithLabel from '../inputs/CheckboxWithLabel';
 
 type Props = {
   customer: SelectCusctomerSchemaType;
@@ -45,9 +48,63 @@ const TicketsForm: React.FC<Props> = ({ ticket, customer }) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmitHandler)}
-          className='flex border p-2 rounded-lg'
+          className='flex flex-col md:flex-row  gap-4 w-full border p-2 rounded-lg'
         >
-          <p>{JSON.stringify(form.getValues())}</p>
+          <div className='flex flex-col gap-2 w-full'>
+            <InputWithLabel<InsertTicketSchemaType>
+              nameInSchema={'title'}
+              fieldTitle='Title'
+            />
+            <InputWithLabel<InsertTicketSchemaType>
+              nameInSchema={'tech'}
+              fieldTitle='Tech'
+              readOnly={true}
+            />{' '}
+            <CheckboxWithLabel<InsertTicketSchemaType>
+              fieldTitle='Completed'
+              message='Check if completed'
+              nameInSchema='completed'
+            />
+            <div className='mt-4 space-y-2'>
+              <h3 className='text-lg'>Customer Info</h3>
+              <hr className='w-3/4' />
+              <p>
+                {customer.firstName} {customer.lastName}{' '}
+              </p>
+              <address>{customer.address1} </address>
+              {customer?.address2 && <address>{customer.address2}</address>}
+              <p>
+                {' '}
+                {customer.city} | {customer.state} | {customer?.postCode}{' '}
+              </p>
+              <hr className='w-3/4' />
+              <p> {customer.phone} </p>
+              <p> {customer.email} </p>
+            </div>
+          </div>
+
+          <div className='flex flex-col gap-2 w-full'>
+            <TextAreaWithLabel<InsertTicketSchemaType>
+              nameInSchema='description'
+              fieldTitle='Description'
+              className='h-64'
+            />
+
+            <div className='flex gap-2 my-2'>
+              <Button title='Save' className='w-3/4' type='submit'>
+                Save
+              </Button>
+              <Button
+                onClick={() => {
+                  form.reset(defaultValues);
+                }}
+                className='w-1/4'
+                variant={'destructive'}
+              >
+                Reset
+              </Button>
+            </div>
+          </div>
         </form>
       </Form>
     </div>

@@ -9,7 +9,6 @@ import {
   type InsertCustomerSchemaType,
   insertCustomerSchema,
   type SelectCusctomerSchemaType,
-  selectCustomerSchema,
 } from '@/zod-schemas/customer';
 import InputWithLabel from '../inputs/InputWithLabel';
 import TextAreaWithLabel from '../inputs/TextAreaWithLabel';
