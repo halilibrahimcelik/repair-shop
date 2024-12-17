@@ -8,16 +8,12 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env: # Setting the environment variable globally for all steps
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-        #Set DATABASE_URL for environment
-      - name: Set DATABASE_URL
-        run: |
-          echo  "repository variable : $DATABASE_URL"
-        env:
-          DATABASE_URL: ${{vars.DATABASE_URL}}
         #Set NODE_ENV for environment
       # Install pnpm
       - name: Install pnpm
