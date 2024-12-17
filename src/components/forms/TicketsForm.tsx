@@ -12,7 +12,6 @@ import {
 } from '@/zod-schemas/tickets';
 import InputWithLabel from '../inputs/InputWithLabel';
 import TextAreaWithLabel from '../inputs/TextAreaWithLabel';
-import SelectWithLabel from '../inputs/SelectWithLabel';
 import { SelectCusctomerSchemaType } from '@/zod-schemas/customer';
 import CheckboxWithLabel from '../inputs/CheckboxWithLabel';
 
