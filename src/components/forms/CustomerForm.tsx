@@ -12,6 +12,9 @@ import {
   selectCustomerSchema,
 } from '@/zod-schemas/customer';
 import InputWithLabel from '../inputs/InputWithLabel';
+import TextAreaWithLabel from '../inputs/TextAreaWithLabel';
+import SelectWithLabel from '../inputs/SelectWithLabel';
+import { CITIES } from '@/constants/cities';
 
 type Props = {
   customer?: SelectCusctomerSchemaType;
@@ -58,7 +61,7 @@ const CustomerForm: React.FC<Props> = ({ customer }) => {
               nameInSchema={'lastName'}
               fieldTitle='Last Name'
             />
-            <InputWithLabel<InsertCustomerSchemaType>
+            <TextAreaWithLabel<InsertCustomerSchemaType>
               nameInSchema={'address1'}
               fieldTitle='Address 1'
             />
@@ -84,9 +87,14 @@ const CustomerForm: React.FC<Props> = ({ customer }) => {
               nameInSchema={'postCode'}
               fieldTitle='Post Code'
             />
-            <InputWithLabel<InsertCustomerSchemaType>
+            <SelectWithLabel<InsertCustomerSchemaType>
               nameInSchema={'state'}
               fieldTitle='State'
+              data={CITIES}
+            />
+            <TextAreaWithLabel<InsertCustomerSchemaType>
+              nameInSchema={'notes'}
+              fieldTitle='Notes'
             />
             <div className='flex gap-2 my-2'>
               <Button title='Save' className='w-3/4' type='submit'>
