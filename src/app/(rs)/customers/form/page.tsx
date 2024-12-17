@@ -1,4 +1,5 @@
 import { BackButton } from '@/components/BackButton';
+import CustomerForm from '@/components/forms/CustomerForm';
 import { getCustomer } from '@/lib/queries';
 
 type Props = {
@@ -27,6 +28,7 @@ const CustomerFormPage: React.FC<Props> = async ({ searchParams }) => {
       return (
         <div>
           <h1>Edit customer form for customer id# {customerId} </h1>
+          <CustomerForm customer={customer} />
         </div>
       );
     } else {
@@ -35,6 +37,7 @@ const CustomerFormPage: React.FC<Props> = async ({ searchParams }) => {
       return (
         <div>
           <h1>New customer form</h1>
+          <CustomerForm />
         </div>
       );
     }

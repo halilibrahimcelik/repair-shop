@@ -27,7 +27,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "__test__/home.test.jsx"
+    "__test__/home.test.jsx",
+    "src/lib/queries/__test__/queries.test.ts"
   ],
   "exclude": ["node_modules"]
 }
