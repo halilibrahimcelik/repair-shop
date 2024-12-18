@@ -1,6 +1,7 @@
 import { BackButton } from '@/components/BackButton';
 import CustomerForm from '@/components/forms/CustomerForm';
 import { getCustomer } from '@/lib/queries';
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 
 export async function generateMetaData({
   searchParams,
@@ -35,6 +36,9 @@ type Props = {
   }>;
 };
 const CustomerFormPage: React.FC<Props> = async ({ searchParams }) => {
+  const { getPermission } = getKindeServerSession();
+  const managerPermission = await getPermission('manager');
+  const isManager = managerPermission?.isGranted;
   try {
     const { customerId } = await searchParams;
 
@@ -55,7 +59,7 @@ const CustomerFormPage: React.FC<Props> = async ({ searchParams }) => {
       return (
         <div>
           <h1>Edit customer form for customer id# {customerId} </h1>
-          <CustomerForm customer={customer} />
+          <CustomerForm customer={customer} isGranted={isManager!} />
         </div>
       );
     } else {
@@ -64,7 +68,7 @@ const CustomerFormPage: React.FC<Props> = async ({ searchParams }) => {
       return (
         <div>
           <h1>New customer form</h1>
-          <CustomerForm />
+          <CustomerForm isGranted={isManager!} />
         </div>
       );
     }

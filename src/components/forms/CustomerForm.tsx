@@ -1,5 +1,4 @@
 'use client';
-import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/ui/form';
@@ -26,11 +25,9 @@ import { CITIES } from '@/constants/cities';
 
 type Props = {
   customer?: SelectCusctomerSchemaType;
+  isGranted: boolean;
 };
-const CustomerForm: React.FC<Props> = ({ customer }) => {
-  const { getPermission, isLoading } = useKindeBrowserClient();
-
-  const isManager = !isLoading && getPermission('manager')?.isGranted;
+const CustomerForm: React.FC<Props> = ({ customer, isGranted }) => {
   //const permissionObj = getPermissions();
   // const isAuthorized =
   //   !isLoading &&
@@ -112,9 +109,7 @@ const CustomerForm: React.FC<Props> = ({ customer }) => {
                 nameInSchema={'notes'}
                 fieldTitle='Notes'
               />
-              {isLoading ? (
-                <>Loading...</>
-              ) : isManager ? (
+              {isGranted && customer?.id ? (
                 <CheckboxWithLabel<InsertCustomerSchemaType>
                   fieldTitle='Active'
                   message='Check if active'

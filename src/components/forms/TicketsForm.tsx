@@ -69,7 +69,13 @@ const TicketsForm: React.FC<Props> = ({
   return (
     <Card className='w-full max-w-4xl mx-auto'>
       <CardHeader className='text-2xl'>
-        <CardTitle>{ticket?.id ? 'Edit' : 'New'} Ticket Form</CardTitle>
+        <CardTitle>
+          {ticket?.id && isEditable
+            ? `Edit #${ticket?.id}  Ticket Form`
+            : ticket?.id && !isEditable
+            ? `View #${ticket?.id} Ticket Form`
+            : 'New Ticket Form'}
+        </CardTitle>
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmitHandler)}>
