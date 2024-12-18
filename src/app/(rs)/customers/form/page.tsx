@@ -2,6 +2,33 @@ import { BackButton } from '@/components/BackButton';
 import CustomerForm from '@/components/forms/CustomerForm';
 import { getCustomer } from '@/lib/queries';
 
+export async function generateMetaData({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    customerId: string | undefined;
+  }>;
+}) {
+  try {
+    const { customerId } = await searchParams;
+
+    if (customerId) {
+      return {
+        title: `Edit Customer ID# ${customerId}`,
+        description: `Edit Customer ID# ${customerId}`,
+      };
+    } else {
+      return {
+        title: 'New Customer',
+        description: 'New Customer',
+      };
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+  }
+}
 type Props = {
   searchParams: Promise<{
     customerId: string | undefined;

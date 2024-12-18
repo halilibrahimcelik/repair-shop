@@ -1,4 +1,5 @@
 'use client';
+import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/ui/form';
@@ -20,12 +21,22 @@ import {
 import InputWithLabel from '../inputs/InputWithLabel';
 import TextAreaWithLabel from '../inputs/TextAreaWithLabel';
 import SelectWithLabel from '../inputs/SelectWithLabel';
+import CheckboxWithLabel from '../inputs/CheckboxWithLabel';
 import { CITIES } from '@/constants/cities';
 
 type Props = {
   customer?: SelectCusctomerSchemaType;
 };
 const CustomerForm: React.FC<Props> = ({ customer }) => {
+  const { getPermission, isLoading } = useKindeBrowserClient();
+
+  const isManager = !isLoading && getPermission('manager')?.isGranted;
+  //const permissionObj = getPermissions();
+  // const isAuthorized =
+  //   !isLoading &&
+  //   permissionObj.permissions.some(
+  //     (perm) => perm === 'manager' || perm === 'admin'
+  //   );
   const defaultValues: InsertCustomerSchemaType = {
     id: customer?.id || 0,
     firstName: customer?.firstName || '',
@@ -35,6 +46,7 @@ const CustomerForm: React.FC<Props> = ({ customer }) => {
     city: customer?.city || '',
     email: customer?.email || '',
     phone: customer?.phone || '',
+    active: customer?.active || true,
     notes: customer?.notes || '',
     postCode: customer?.postCode || '',
     state: customer?.state || '',
@@ -51,7 +63,7 @@ const CustomerForm: React.FC<Props> = ({ customer }) => {
   return (
     <Card className='w-full max-w-4xl mx-auto'>
       <CardHeader>
-        <CardTitle>{customer?.id ? 'Edit' : 'New'} Ticket</CardTitle>
+        <CardTitle>{customer?.id ? 'Edit' : 'New'} Customer Form</CardTitle>
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -100,6 +112,15 @@ const CustomerForm: React.FC<Props> = ({ customer }) => {
                 nameInSchema={'notes'}
                 fieldTitle='Notes'
               />
+              {isLoading ? (
+                <>Loading...</>
+              ) : isManager ? (
+                <CheckboxWithLabel<InsertCustomerSchemaType>
+                  fieldTitle='Active'
+                  message='Check if active'
+                  nameInSchema='active'
+                />
+              ) : null}
             </div>
           </CardContent>
           <CardFooter className='flex justify-between'>

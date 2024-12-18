@@ -34,6 +34,7 @@ const SelectWithLabel = <S,>({
   data,
 }: Props<S>) => {
   const { control } = useFormContext();
+  console.log(data);
   return (
     <FormField
       control={control}

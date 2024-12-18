@@ -15,12 +15,14 @@ type Props<S> = {
   fieldTitle: string;
   nameInSchema: keyof S & string;
   message: string;
+  disabled?: boolean;
 };
 
 const CheckboxWithLabel = <S,>({
   fieldTitle,
   nameInSchema,
   message,
+  disabled = false,
 }: Props<S>) => {
   const { control } = useFormContext();
 
@@ -37,6 +39,7 @@ const CheckboxWithLabel = <S,>({
             <div className='flex items-center gap-2 '>
               <FormControl>
                 <Checkbox
+                  disabled={disabled}
                   checked={field.value}
                   id={nameInSchema}
                   onCheckedChange={field.onChange}

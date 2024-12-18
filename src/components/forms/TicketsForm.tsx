@@ -29,13 +29,25 @@ import { SelectCusctomerSchemaType } from '@/zod-schemas/customer';
 import InputWithLabel from '../inputs/InputWithLabel';
 import TextAreaWithLabel from '../inputs/TextAreaWithLabel';
 import CheckboxWithLabel from '../inputs/CheckboxWithLabel';
+import SelectWithLabel from '../inputs/SelectWithLabel';
 
 type Props = {
   customer: SelectCusctomerSchemaType;
   ticket?: SelectTicketSchemaType;
+  techs?: {
+    id: string;
+    name: string;
+  }[];
+  isEditable?: boolean;
 };
 
-const TicketsForm: React.FC<Props> = ({ ticket, customer }) => {
+const TicketsForm: React.FC<Props> = ({
+  ticket,
+  customer,
+  techs,
+  isEditable = true,
+}) => {
+  const isManager = Array.isArray(techs);
   const defaultValues: InsertTicketSchemaType = {
     customersId: customer.id ?? ticket?.customersId,
     id: ticket?.id || 'New',
@@ -54,11 +66,10 @@ const TicketsForm: React.FC<Props> = ({ ticket, customer }) => {
   const onSubmitHandler = async (data: InsertTicketSchemaType) => {
     console.log(data);
   };
-
   return (
     <Card className='w-full max-w-4xl mx-auto'>
-      <CardHeader>
-        <CardTitle>{ticket?.id ? 'Edit' : 'New'} Ticket</CardTitle>
+      <CardHeader className='text-2xl'>
+        <CardTitle>{ticket?.id ? 'Edit' : 'New'} Ticket Form</CardTitle>
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmitHandler)}>
@@ -67,18 +78,35 @@ const TicketsForm: React.FC<Props> = ({ ticket, customer }) => {
               <InputWithLabel<InsertTicketSchemaType>
                 nameInSchema={'title'}
                 fieldTitle='Title'
+                disabled={!isEditable}
               />
-              <InputWithLabel<InsertTicketSchemaType>
-                nameInSchema={'tech'}
-                fieldTitle='Tech'
-                readOnly={true}
-              />
-              <CheckboxWithLabel<InsertTicketSchemaType>
-                fieldTitle='Completed'
-                message='Check if completed'
-                nameInSchema='completed'
-              />
-
+              {isManager ? (
+                <SelectWithLabel<InsertTicketSchemaType>
+                  nameInSchema='tech'
+                  fieldTitle='Tech ID'
+                  data={[
+                    {
+                      id: 'new-ticket@example.com',
+                      name: 'new-ticket@example.com',
+                    },
+                    ...techs,
+                  ]}
+                />
+              ) : (
+                <InputWithLabel<InsertTicketSchemaType>
+                  nameInSchema={'tech'}
+                  fieldTitle='Tech ID'
+                  disabled={true}
+                />
+              )}
+              {ticket?.id ? (
+                <CheckboxWithLabel<InsertTicketSchemaType>
+                  fieldTitle='Completed'
+                  message='Check if completed'
+                  nameInSchema='completed'
+                  disabled={!isEditable}
+                />
+              ) : null}
               <Accordion
                 type='single'
                 defaultValue='customer-info'
@@ -124,6 +152,7 @@ const TicketsForm: React.FC<Props> = ({ ticket, customer }) => {
                 nameInSchema='description'
                 fieldTitle='Description'
                 className='h-64'
+                disabled={!isEditable}
               />
             </div>
           </CardContent>
@@ -132,11 +161,12 @@ const TicketsForm: React.FC<Props> = ({ ticket, customer }) => {
               className='px-8'
               type='button'
               variant='destructive'
+              disabled={!isEditable}
               onClick={() => form.reset(defaultValues)}
             >
               Reset
             </Button>
-            <Button className='px-8' type='submit'>
+            <Button disabled={!isEditable} className='px-8' type='submit'>
               Save
             </Button>
           </CardFooter>
