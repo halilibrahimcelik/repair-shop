@@ -1,24 +1,40 @@
 'use client';
+
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/ui/form';
-
 import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import { User, MapPin, Phone, Mail } from 'lucide-react';
 
 import {
   SelectTicketSchemaType,
   InsertTicketSchemaType,
   insertTicketSchema,
 } from '@/zod-schemas/tickets';
+import { SelectCusctomerSchemaType } from '@/zod-schemas/customer';
 import InputWithLabel from '../inputs/InputWithLabel';
 import TextAreaWithLabel from '../inputs/TextAreaWithLabel';
-import { SelectCusctomerSchemaType } from '@/zod-schemas/customer';
 import CheckboxWithLabel from '../inputs/CheckboxWithLabel';
 
 type Props = {
   customer: SelectCusctomerSchemaType;
   ticket?: SelectTicketSchemaType;
 };
+
 const TicketsForm: React.FC<Props> = ({ ticket, customer }) => {
   const defaultValues: InsertTicketSchemaType = {
     customersId: customer.id ?? ticket?.customersId,
@@ -34,79 +50,99 @@ const TicketsForm: React.FC<Props> = ({ ticket, customer }) => {
     resolver: zodResolver(insertTicketSchema),
     defaultValues,
   });
+
   const onSubmitHandler = async (data: InsertTicketSchemaType) => {
     console.log(data);
   };
+
   return (
-    <div className='flex flex-col gap-3 sm:px-8'>
-      <div>
-        <h2 className='subheading'>
-          {ticket?.id ? 'Edit' : 'New'} Ticket Form
-        </h2>
-      </div>
+    <Card className='w-full max-w-4xl mx-auto'>
+      <CardHeader>
+        <CardTitle>{ticket?.id ? 'Edit' : 'New'} Ticket</CardTitle>
+      </CardHeader>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmitHandler)}
-          className='flex flex-col md:flex-row  gap-4 w-full border p-2 rounded-lg'
-        >
-          <div className='flex flex-col gap-2 w-full'>
-            <InputWithLabel<InsertTicketSchemaType>
-              nameInSchema={'title'}
-              fieldTitle='Title'
-            />
-            <InputWithLabel<InsertTicketSchemaType>
-              nameInSchema={'tech'}
-              fieldTitle='Tech'
-              readOnly={true}
-            />{' '}
-            <CheckboxWithLabel<InsertTicketSchemaType>
-              fieldTitle='Completed'
-              message='Check if completed'
-              nameInSchema='completed'
-            />
-            <div className='mt-4 space-y-2'>
-              <h3 className='text-lg'>Customer Info</h3>
-              <hr className='w-3/4' />
-              <p>
-                {customer.firstName} {customer.lastName}{' '}
-              </p>
-              <address>{customer.address1} </address>
-              {customer?.address2 && <address>{customer.address2}</address>}
-              <p>
-                {' '}
-                {customer.city} | {customer.state} | {customer?.postCode}{' '}
-              </p>
-              <hr className='w-3/4' />
-              <p> {customer.phone} </p>
-              <p> {customer.email} </p>
-            </div>
-          </div>
+        <form onSubmit={form.handleSubmit(onSubmitHandler)}>
+          <CardContent className='grid gap-6 sm:grid-cols-2'>
+            <div className='space-y-4'>
+              <InputWithLabel<InsertTicketSchemaType>
+                nameInSchema={'title'}
+                fieldTitle='Title'
+              />
+              <InputWithLabel<InsertTicketSchemaType>
+                nameInSchema={'tech'}
+                fieldTitle='Tech'
+                readOnly={true}
+              />
+              <CheckboxWithLabel<InsertTicketSchemaType>
+                fieldTitle='Completed'
+                message='Check if completed'
+                nameInSchema='completed'
+              />
 
-          <div className='flex flex-col gap-2 w-full'>
-            <TextAreaWithLabel<InsertTicketSchemaType>
-              nameInSchema='description'
-              fieldTitle='Description'
-              className='h-64'
-            />
-
-            <div className='flex gap-2 my-2'>
-              <Button title='Save' className='w-3/4' type='submit'>
-                Save
-              </Button>
-              <Button
-                onClick={() => {
-                  form.reset(defaultValues);
-                }}
-                className='w-1/4'
-                variant={'destructive'}
+              <Accordion
+                type='single'
+                defaultValue='customer-info'
+                collapsible
+                className='w-full'
               >
-                Reset
-              </Button>
+                <AccordionItem value='customer-info'>
+                  <AccordionTrigger>Customer Info</AccordionTrigger>
+                  <AccordionContent>
+                    <div className='space-y-2'>
+                      <div className='flex items-center space-x-2'>
+                        <User className='h-4 w-4' />
+                        <span>
+                          {customer.firstName} {customer.lastName}
+                        </span>
+                      </div>
+                      <div className='flex items-center space-x-2'>
+                        <MapPin className='h-4 w-4' />
+                        <address>
+                          {customer.address1}
+                          {customer.address2 && <>, {customer.address2}</>}
+                          <br />
+                          {customer.city}, {customer.state} {customer.postCode}
+                        </address>
+                      </div>
+                      <Separator />
+                      <div className='flex items-center space-x-2'>
+                        <Phone className='h-4 w-4' />
+                        <span>{customer.phone}</span>
+                      </div>
+                      <div className='flex items-center space-x-2'>
+                        <Mail className='h-4 w-4' />
+                        <span>{customer.email}</span>
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </div>
-          </div>
+
+            <div className='space-y-4'>
+              <TextAreaWithLabel<InsertTicketSchemaType>
+                nameInSchema='description'
+                fieldTitle='Description'
+                className='h-64'
+              />
+            </div>
+          </CardContent>
+          <CardFooter className='flex justify-between'>
+            <Button
+              className='px-8'
+              type='button'
+              variant='destructive'
+              onClick={() => form.reset(defaultValues)}
+            >
+              Reset
+            </Button>
+            <Button className='px-8' type='submit'>
+              Save
+            </Button>
+          </CardFooter>
         </form>
       </Form>
-    </div>
+    </Card>
   );
 };
 

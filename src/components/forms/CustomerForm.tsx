@@ -2,6 +2,13 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/ui/form';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
 import { Button } from '@/components/ui/button';
 
@@ -42,77 +49,76 @@ const CustomerForm: React.FC<Props> = ({ customer }) => {
     console.log(data);
   };
   return (
-    <div className='flex flex-col gap-2 sm:px-8 max-w-sm md:max-w-xl w-full mx-auto'>
-      <div>
-        <h2 className='subheading'>{customer?.id ? 'Edit' : 'New'} Customer</h2>
-      </div>
+    <Card className='w-full max-w-4xl mx-auto'>
+      <CardHeader>
+        <CardTitle>{customer?.id ? 'Edit' : 'New'} Ticket</CardTitle>
+      </CardHeader>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className='flex flex-col md:flex-row  gap-4 w-full border p-2 rounded-lg'
-        >
-          <div className='flex flex-col gap-2 w-full'>
-            <InputWithLabel<InsertCustomerSchemaType>
-              nameInSchema={'firstName'}
-              fieldTitle='First Name'
-            />
-            <InputWithLabel<InsertCustomerSchemaType>
-              nameInSchema={'lastName'}
-              fieldTitle='Last Name'
-            />
-            <TextAreaWithLabel<InsertCustomerSchemaType>
-              nameInSchema={'address1'}
-              fieldTitle='Address 1'
-            />
-            <InputWithLabel<InsertCustomerSchemaType>
-              nameInSchema={'address2'}
-              fieldTitle='Address 2'
-            />
-            <InputWithLabel<InsertCustomerSchemaType>
-              nameInSchema={'city'}
-              fieldTitle='City'
-            />
-          </div>
-          <div className='flex flex-col gap-2 w-full'>
-            <InputWithLabel<InsertCustomerSchemaType>
-              nameInSchema={'phone'}
-              fieldTitle='Phone'
-            />
-            <InputWithLabel<InsertCustomerSchemaType>
-              nameInSchema={'email'}
-              fieldTitle='Email'
-            />
-            <InputWithLabel<InsertCustomerSchemaType>
-              nameInSchema={'postCode'}
-              fieldTitle='Post Code'
-            />
-            <SelectWithLabel<InsertCustomerSchemaType>
-              nameInSchema={'state'}
-              fieldTitle='State'
-              data={CITIES}
-            />
-            <TextAreaWithLabel<InsertCustomerSchemaType>
-              nameInSchema={'notes'}
-              fieldTitle='Notes'
-            />
-            <div className='flex gap-2 my-2'>
-              <Button title='Save' className='w-3/4' type='submit'>
-                Save
-              </Button>
-              <Button
-                onClick={() => {
-                  form.reset(defaultValues);
-                }}
-                className='w-1/4'
-                variant={'destructive'}
-              >
-                Reset
-              </Button>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <CardContent className='grid gap-6 sm:grid-cols-2'>
+            <div className='space-y-4'>
+              <InputWithLabel<InsertCustomerSchemaType>
+                nameInSchema={'firstName'}
+                fieldTitle='First Name'
+              />
+              <InputWithLabel<InsertCustomerSchemaType>
+                nameInSchema={'lastName'}
+                fieldTitle='Last Name'
+              />
+              <TextAreaWithLabel<InsertCustomerSchemaType>
+                nameInSchema={'address1'}
+                fieldTitle='Address 1'
+              />
+              <InputWithLabel<InsertCustomerSchemaType>
+                nameInSchema={'address2'}
+                fieldTitle='Address 2'
+              />
+              <InputWithLabel<InsertCustomerSchemaType>
+                nameInSchema={'city'}
+                fieldTitle='City'
+              />
             </div>
-          </div>
+            <div className='space-y-4'>
+              <InputWithLabel<InsertCustomerSchemaType>
+                nameInSchema={'phone'}
+                fieldTitle='Phone'
+              />
+              <InputWithLabel<InsertCustomerSchemaType>
+                nameInSchema={'email'}
+                fieldTitle='Email'
+              />
+              <InputWithLabel<InsertCustomerSchemaType>
+                nameInSchema={'postCode'}
+                fieldTitle='Post Code'
+              />
+              <SelectWithLabel<InsertCustomerSchemaType>
+                nameInSchema={'state'}
+                fieldTitle='State'
+                data={CITIES}
+              />
+              <TextAreaWithLabel<InsertCustomerSchemaType>
+                nameInSchema={'notes'}
+                fieldTitle='Notes'
+              />
+            </div>
+          </CardContent>
+          <CardFooter className='flex justify-between'>
+            <Button
+              onClick={() => {
+                form.reset(defaultValues);
+              }}
+              className='px-8'
+              variant={'destructive'}
+            >
+              Reset
+            </Button>
+            <Button title='Save' className='px-8' type='submit'>
+              Save
+            </Button>
+          </CardFooter>
         </form>
       </Form>
-    </div>
+    </Card>
   );
 };
 
