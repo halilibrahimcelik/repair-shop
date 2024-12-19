@@ -30,7 +30,10 @@ import InputWithLabel from '../inputs/InputWithLabel';
 import TextAreaWithLabel from '../inputs/TextAreaWithLabel';
 import CheckboxWithLabel from '../inputs/CheckboxWithLabel';
 import SelectWithLabel from '../inputs/SelectWithLabel';
-
+import { useAction } from 'next-safe-action/hooks';
+import { LoaderCircle } from 'lucide-react';
+import { saveTicketAction } from '@/app/actions/saveTicketAction';
+import { toast } from 'sonner';
 type Props = {
   customer: SelectCusctomerSchemaType;
   ticket?: SelectTicketSchemaType;
@@ -62,9 +65,62 @@ const TicketsForm: React.FC<Props> = ({
     resolver: zodResolver(insertTicketSchema),
     defaultValues,
   });
+  const {
+    execute: executeSave,
+    isExecuting: executeSaving,
+    reset: resetSaveAction,
+  } = useAction(saveTicketAction, {
+    onSuccess({ data }) {
+      //use toast
+      if (data?.message) {
+        toast.success('Succes!', {
+          description: data?.message,
+          className: 'flex items-center w-full ',
+          closeButton: true,
+          classNames: {
+            closeButton: 'toast-close-btn',
+          },
+          cancel: (
+            <Button
+              onClick={() => toast.dismiss()}
+              className='absolute bottom-1 right-1'
+              size={'sm'}
+              variant={'ghost'}
+            >
+              Dismiss
+            </Button>
+          ),
 
+          richColors: true,
+        });
+      }
+    },
+    onError({ error }) {
+      toast.error('Error Found', {
+        description: error?.serverError,
+        className: 'flex items-center w-full ',
+        closeButton: true,
+        classNames: {
+          closeButton: 'toast-close-btn',
+        },
+        cancel: (
+          <Button
+            onClick={() => toast.dismiss()}
+            className='absolute bottom-1 right-1'
+            size={'sm'}
+            variant={'ghost'}
+          >
+            Dismiss
+          </Button>
+        ),
+
+        richColors: true,
+      });
+    },
+  });
   const onSubmitHandler = async (data: InsertTicketSchemaType) => {
     console.log(data);
+    executeSave(data);
   };
   return (
     <Card className='w-full max-w-4xl mx-auto'>
@@ -168,12 +224,24 @@ const TicketsForm: React.FC<Props> = ({
               type='button'
               variant='destructive'
               disabled={!isEditable}
-              onClick={() => form.reset(defaultValues)}
+              onClick={() => {
+                form.reset(defaultValues);
+
+                resetSaveAction();
+              }}
             >
               Reset
             </Button>
-            <Button disabled={!isEditable} className='px-8' type='submit'>
-              Save
+            <Button
+              disabled={!isEditable || executeSaving}
+              className='px-8'
+              type='submit'
+            >
+              {executeSaving ? (
+                <LoaderCircle className='h-6 w-6 animate-spin' />
+              ) : (
+                'Save'
+              )}
             </Button>
           </CardFooter>
         </form>

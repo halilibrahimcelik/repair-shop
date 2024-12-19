@@ -64,26 +64,28 @@ const CustomerForm: React.FC<Props> = ({ customer, isGranted }) => {
   } = useAction(saveCustomerAction, {
     onSuccess({ data }) {
       //use toast
-      toast.success('Customer Saved Succesfully!', {
-        description: data?.message,
-        className: 'flex items-center w-full ',
-        closeButton: true,
-        classNames: {
-          closeButton: 'toast-close-btn',
-        },
-        cancel: (
-          <Button
-            onClick={() => toast.dismiss()}
-            className='absolute bottom-1 right-1'
-            size={'sm'}
-            variant={'ghost'}
-          >
-            Dismiss
-          </Button>
-        ),
+      if (data?.message) {
+        toast.success('Customer Saved Succesfully!', {
+          description: data?.message,
+          className: 'flex items-center w-full ',
+          closeButton: true,
+          classNames: {
+            closeButton: 'toast-close-btn',
+          },
+          cancel: (
+            <Button
+              onClick={() => toast.dismiss()}
+              className='absolute bottom-1 right-1'
+              size={'sm'}
+              variant={'ghost'}
+            >
+              Dismiss
+            </Button>
+          ),
 
-        richColors: true,
-      });
+          richColors: true,
+        });
+      }
     },
     onError({ error }) {
       toast.error('Error Found', {

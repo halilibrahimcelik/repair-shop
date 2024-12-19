@@ -2,15 +2,13 @@
 // The config you add here will be used whenever a users loads a page in their browser.
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from '@sentry/nextjs';
 
 Sentry.init({
-  dsn: "https://e4176a0c56d18f0c5bb0bc62e5911e83@o1243684.ingest.us.sentry.io/4508444557377536",
-
+  dsn: 'https://e4176a0c56d18f0c5bb0bc62e5911e83@o1243684.ingest.us.sentry.io/4508444557377536',
+  ignoreErrors: [/^NEXT_REDIRECT$/],
   // Add optional integrations for additional features
-  integrations: [
-    Sentry.replayIntegration(),
-  ],
+  integrations: [Sentry.replayIntegration()],
 
   // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
   tracesSampleRate: 1,
