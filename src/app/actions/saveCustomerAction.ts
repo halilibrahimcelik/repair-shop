@@ -57,7 +57,7 @@ export const saveCustomerAction = actionClient
             insertedId: customersTable.id,
           });
         return {
-          message: `Customer Id #${result[0].insertedId} created successfully `,
+          message: `Customer ID #${result[0].insertedId} created successfully `,
         };
       }
 

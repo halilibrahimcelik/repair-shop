@@ -25,7 +25,7 @@ export const actionClient = createSafeActionClient({
       });
       return scope;
     });
-    if (e.constructor.name === 'DatabaseError') {
+    if (e.constructor.name === 'NeonDbError') {
       return 'Database Error: Your data did not save. Suppor will be verified.';
     }
     return e.message;
