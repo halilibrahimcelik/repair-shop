@@ -15,8 +15,8 @@ export async function generateMetaData({
     const { ticketId, customerId } = await searchParams;
     if (!ticketId && !customerId) {
       return {
-        title: 'Ticket Form',
-        description: 'Ticket Form',
+        title: 'Missin Ticket ID and customer ID',
+        description: 'Missin Ticket ID and customer ID',
       };
     }
     if (customerId) {
@@ -127,17 +127,17 @@ const TicketFormPage: React.FC<Props> = async ({ searchParams }) => {
         const techs = users
           ? users.map((user) => ({ id: user.id!, name: user.email! }))
           : [];
+        console.log(techs);
         return (
           <div>
-            <h1>Edit ticket form for ticket id# {ticketId} </h1>
             <TicketsForm customer={customerX!} ticket={ticket} techs={techs} />
           </div>
         );
       } else {
-        const editable = user.email === ticket.tech;
+        const editable =
+          user.email?.trim().toLowerCase() === ticket.tech.trim().toLowerCase();
         return (
           <div>
-            <h1>Edit ticket form for ticket id# {ticketId} </h1>
             <TicketsForm
               customer={customerX!}
               ticket={ticket}
