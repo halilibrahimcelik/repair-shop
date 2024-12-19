@@ -60,7 +60,7 @@ const CustomerForm: React.FC<Props> = ({ customer, isGranted }) => {
     execute: executeSave,
     // result: saveResult,
     reset: resetSaveAction,
-    isExecuting: isSaving,
+    isPending: isSaving,
   } = useAction(saveCustomerAction, {
     onSuccess({ data }) {
       //use toast

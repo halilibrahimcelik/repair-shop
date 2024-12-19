@@ -67,7 +67,7 @@ const TicketsForm: React.FC<Props> = ({
   });
   const {
     execute: executeSave,
-    isExecuting: executeSaving,
+    isPending: executeSaving,
     reset: resetSaveAction,
   } = useAction(saveTicketAction, {
     onSuccess({ data }) {
