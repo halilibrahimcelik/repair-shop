@@ -35,7 +35,6 @@ export const saveCustomerAction = actionClient
       if (!isAuth) {
         redirect('/login');
       }
-
       //New Customer case
       if (customer.id === 0) {
         const result = await db

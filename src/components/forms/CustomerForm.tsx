@@ -25,8 +25,7 @@ import CheckboxWithLabel from '../inputs/CheckboxWithLabel';
 import { useAction } from 'next-safe-action/hooks';
 import { saveCustomerAction } from '@/app/actions/saveCustomerAction';
 import { CITIES } from '@/constants/cities';
-import { EyeClosed, SquareCheck } from 'lucide-react';
-
+import { LoaderCircle } from 'lucide-react';
 type Props = {
   customer?: SelectCusctomerSchemaType;
   isGranted: boolean;
@@ -59,7 +58,7 @@ const CustomerForm: React.FC<Props> = ({ customer, isGranted }) => {
   });
   const {
     execute: executeSave,
-    result: saveResult,
+    // result: saveResult,
     reset: resetSaveAction,
     isExecuting: isSaving,
   } = useAction(saveCustomerAction, {
@@ -110,10 +109,12 @@ const CustomerForm: React.FC<Props> = ({ customer, isGranted }) => {
     },
   });
   const onSubmit = async (data: InsertCustomerSchemaType) => {
+    executeSave(data);
     console.log(data);
   };
   return (
     <Card className='w-full max-w-4xl mx-auto'>
+      {/* <DisplayServerActionResponse result={saveResult} /> */}
       <CardHeader>
         <CardTitle>{customer?.id ? 'Edit' : 'New'} Customer Form</CardTitle>
       </CardHeader>
@@ -177,14 +178,24 @@ const CustomerForm: React.FC<Props> = ({ customer, isGranted }) => {
             <Button
               onClick={() => {
                 form.reset(defaultValues);
+                resetSaveAction();
               }}
               className='px-8'
               variant={'destructive'}
             >
               Reset
             </Button>
-            <Button title='Save' className='px-8' type='submit'>
-              Save
+            <Button
+              title='Save'
+              disabled={isSaving}
+              className='px-8'
+              type='submit'
+            >
+              {isSaving ? (
+                <LoaderCircle className='w-6 h-6  animate-spin' />
+              ) : (
+                'Save'
+              )}
             </Button>
           </CardFooter>
         </form>
