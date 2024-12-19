@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/card';
 
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 import {
   type InsertCustomerSchemaType,
@@ -21,7 +22,10 @@ import InputWithLabel from '../inputs/InputWithLabel';
 import TextAreaWithLabel from '../inputs/TextAreaWithLabel';
 import SelectWithLabel from '../inputs/SelectWithLabel';
 import CheckboxWithLabel from '../inputs/CheckboxWithLabel';
+import { useAction } from 'next-safe-action/hooks';
+import { saveCustomerAction } from '@/app/actions/saveCustomerAction';
 import { CITIES } from '@/constants/cities';
+import { EyeClosed, SquareCheck } from 'lucide-react';
 
 type Props = {
   customer?: SelectCusctomerSchemaType;
@@ -53,7 +57,58 @@ const CustomerForm: React.FC<Props> = ({ customer, isGranted }) => {
     defaultValues,
     resolver: zodResolver(insertCustomerSchema),
   });
+  const {
+    execute: executeSave,
+    result: saveResult,
+    reset: resetSaveAction,
+    isExecuting: isSaving,
+  } = useAction(saveCustomerAction, {
+    onSuccess({ data }) {
+      //use toast
+      toast.success('Customer Saved Succesfully!', {
+        description: data?.message,
+        className: 'flex items-center w-full ',
+        closeButton: true,
+        classNames: {
+          closeButton: 'toast-close-btn',
+        },
+        cancel: (
+          <Button
+            onClick={() => toast.dismiss()}
+            className='absolute bottom-1 right-1'
+            size={'sm'}
+            variant={'ghost'}
+          >
+            Dismiss
+          </Button>
+        ),
 
+        richColors: true,
+      });
+    },
+    onError({ error }) {
+      toast.error('Error Found', {
+        description: error?.serverError,
+        className: 'flex items-center w-full ',
+        closeButton: true,
+        classNames: {
+          closeButton: 'toast-close-btn',
+        },
+        cancel: (
+          <Button
+            onClick={() => toast.dismiss()}
+            className='absolute bottom-1 right-1'
+            size={'sm'}
+            variant={'ghost'}
+          >
+            Dismiss
+          </Button>
+        ),
+
+        richColors: true,
+      });
+    },
+  });
   const onSubmit = async (data: InsertCustomerSchemaType) => {
     console.log(data);
   };
@@ -64,7 +119,7 @@ const CustomerForm: React.FC<Props> = ({ customer, isGranted }) => {
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <CardContent className='grid gap-6 sm:grid-cols-2'>
+          <CardContent className='grid gap-6 sm:grid-cols-2 r--'>
             <div className='space-y-4'>
               <InputWithLabel<InsertCustomerSchemaType>
                 nameInSchema={'firstName'}

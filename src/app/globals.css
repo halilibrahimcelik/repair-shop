@@ -25,6 +25,9 @@ body {
   .small-text {
     @apply text-sm font-light sm:text-base lg:text-lg;
   }
+  .toast-close-btn {
+    @apply right-[-15px];
+  }
 }
 
 @layer base {
