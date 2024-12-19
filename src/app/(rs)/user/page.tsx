@@ -11,7 +11,7 @@ const UserPage: NextPage = async () => {
 
   return (
     <div className='my-4'>
-      <h1>Welcome {user?.given_name}</h1>
+      <h1>Welcome back {user?.given_name}</h1>
       <p>Here you can see edit your Profile</p>
       <UserForm accessToken={accessToken} user={user} />
     </div>
