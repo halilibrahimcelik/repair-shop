@@ -119,7 +119,6 @@ const TicketsForm: React.FC<Props> = ({
     },
   });
   const onSubmitHandler = async (data: InsertTicketSchemaType) => {
-    console.log(data);
     executeSave(data);
   };
   return (
