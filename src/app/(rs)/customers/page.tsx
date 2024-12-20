@@ -1,6 +1,6 @@
 import React from 'react';
-import CustomerSearch from '@/components/CustomerSearch';
 import { getCustomerSearchResults } from '@/lib/queries';
+import SearchForm from '@/components/SearchForm';
 type Props = {
   searchParams: Promise<{ searchText: string | undefined }>;
 };
@@ -12,12 +12,12 @@ const CustomerPage = async ({ searchParams }: Props) => {
   const { searchText } = await searchParams;
 
   if (!searchText) {
-    return <CustomerSearch />;
+    return <SearchForm action='/customers' />;
   }
   const results = await getCustomerSearchResults(searchText);
   return (
     <div>
-      <CustomerSearch searchText={searchText} />
+      <SearchForm action='/customers' searchText={searchText} />
       <h1>
         Customer Search Results for: {searchText}
         {JSON.stringify(results)}

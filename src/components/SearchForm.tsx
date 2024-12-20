@@ -4,13 +4,11 @@ import SearchButton from './SearchButton';
 
 type Props = {
   searchText?: string;
+  action: string;
 };
-const CustomerSearch: React.FC<Props> = ({ searchText }) => {
+const SearchForm: React.FC<Props> = ({ searchText, action }) => {
   return (
-    <Form
-      className='flex items-center gap-2 p-2 max-w-lg'
-      action={'/customers'}
-    >
+    <Form className='flex items-center gap-2 p-2 max-w-lg' action={action}>
       <Input
         defaultValue={searchText!}
         name='searchText'
@@ -21,4 +19,4 @@ const CustomerSearch: React.FC<Props> = ({ searchText }) => {
     </Form>
   );
 };
-export default CustomerSearch;
+export default SearchForm;
