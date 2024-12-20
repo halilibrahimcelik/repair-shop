@@ -1,14 +1,17 @@
 'use client';
 import React from 'react';
-import { HomeIcon, File, UsersRound, LogOut } from 'lucide-react';
-import NavButton from './NavButton';
+import { HomeIcon, LogOut, File } from 'lucide-react';
+
 import Link from 'next/link';
 import { ROUTES } from '@/types/default';
 import DarkModeSwitch from './DarkModeSwitch';
 import { LogoutLink } from '@kinde-oss/kinde-auth-nextjs/components';
-import { Button } from './ui/button';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { KindeUser } from '@kinde-oss/kinde-auth-nextjs/types';
+import NavButton from './NavButton';
+import { Button } from '../ui/button';
+import CustomersDropdown from './CustomersDropdown';
 
 type Props = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,11 +53,7 @@ const Header = ({ user }: Props) => {
           </Button>
 
           <NavButton label='Tickets' Icon={File} href={ROUTES.TICKETS} />
-          <NavButton
-            label='customer'
-            Icon={UsersRound}
-            href={ROUTES.CUSTOMERS}
-          />
+          <CustomersDropdown />
           <DarkModeSwitch />
           <Button
             variant='ghost'

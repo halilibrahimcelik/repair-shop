@@ -3,6 +3,8 @@ import localFont from 'next/font/local';
 import './globals.css';
 import { ThemeProvider } from '@/providers/ThemeProvider';
 import { Toaster } from '@/components/ui/sonner';
+import NextTopLoader from 'nextjs-toploader';
+
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
   variable: '--font-geist-sans',
@@ -57,11 +59,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
-          <Toaster
-            duration={22000}
-            visibleToasts={2}
-            position='bottom-center'
-          />
+          <Toaster visibleToasts={2} position='bottom-center' />
+          <NextTopLoader speed={50000} color='#ad7ebc' showSpinner={false} />
         </ThemeProvider>
       </body>
     </html>
