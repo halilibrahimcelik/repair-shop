@@ -66,7 +66,7 @@ export const saveTicketAction = actionClient
           updatedId: ticketsTable.id,
         });
       return {
-        message: `Ticket ID #${result[0].updatedId} updated succesfully `,
+        message: `Ticket ID #${result[0].updatedId} updated succesfully`,
       };
     }
   );

@@ -61,9 +61,6 @@ export default function RootLayout({
             duration={22000}
             visibleToasts={2}
             position='bottom-center'
-            toastOptions={{
-              duration: 20000000,
-            }}
           />
         </ThemeProvider>
       </body>

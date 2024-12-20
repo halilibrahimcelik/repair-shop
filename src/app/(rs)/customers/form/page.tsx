@@ -46,7 +46,6 @@ const CustomerFormPage: React.FC<Props> = async ({ searchParams }) => {
       //editForm
 
       const customer = await getCustomer(parseInt(customerId));
-      console.log(customer);
       if (!customer) {
         return (
           <div>
