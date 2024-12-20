@@ -39,8 +39,8 @@ const TextAreaWithLabel = <S,>({
             <FormControl>
               <Textarea
                 id={nameInSchema}
-                className={`w-full px-2 py-1 rounded-lg  disabled:text-blue-400
-                       dark:disabled:text-green-300 disabled:opacity-60 ${className}`}
+                className={`w-full px-2 py-1 rounded-lg  disabled:text-blue-400!
+                     dark:disabled:text-gray-300! disabled:opacity-60 ${className}`}
                 {...props}
                 {...field}
               />

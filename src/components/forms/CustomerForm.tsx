@@ -2,8 +2,16 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/ui/form';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 import {
   type InsertCustomerSchemaType,
@@ -13,12 +21,22 @@ import {
 import InputWithLabel from '../inputs/InputWithLabel';
 import TextAreaWithLabel from '../inputs/TextAreaWithLabel';
 import SelectWithLabel from '../inputs/SelectWithLabel';
+import CheckboxWithLabel from '../inputs/CheckboxWithLabel';
+import { useAction } from 'next-safe-action/hooks';
+import { saveCustomerAction } from '@/app/actions/saveCustomerAction';
 import { CITIES } from '@/constants/cities';
-
+import { LoaderCircle } from 'lucide-react';
 type Props = {
   customer?: SelectCusctomerSchemaType;
+  isGranted: boolean;
 };
-const CustomerForm: React.FC<Props> = ({ customer }) => {
+const CustomerForm: React.FC<Props> = ({ customer, isGranted }) => {
+  //const permissionObj = getPermissions();
+  // const isAuthorized =
+  //   !isLoading &&
+  //   permissionObj.permissions.some(
+  //     (perm) => perm === 'manager' || perm === 'admin'
+  //   );
   const defaultValues: InsertCustomerSchemaType = {
     id: customer?.id || 0,
     firstName: customer?.firstName || '',
@@ -28,6 +46,7 @@ const CustomerForm: React.FC<Props> = ({ customer }) => {
     city: customer?.city || '',
     email: customer?.email || '',
     phone: customer?.phone || '',
+    active: customer?.active || true,
     notes: customer?.notes || '',
     postCode: customer?.postCode || '',
     state: customer?.state || '',
@@ -37,82 +56,153 @@ const CustomerForm: React.FC<Props> = ({ customer }) => {
     defaultValues,
     resolver: zodResolver(insertCustomerSchema),
   });
+  const {
+    execute: executeSave,
+    // result: saveResult,
+    reset: resetSaveAction,
+    isPending: isSaving,
+  } = useAction(saveCustomerAction, {
+    onSuccess({ data }) {
+      //use toast
+      if (data?.message) {
+        toast.success('Customer Saved Succesfully!', {
+          description: data?.message,
+          className: 'flex items-center w-full ',
+          closeButton: true,
+          classNames: {
+            closeButton: 'toast-close-btn',
+          },
+          cancel: (
+            <Button
+              onClick={() => toast.dismiss()}
+              className='absolute bottom-1 right-1'
+              size={'sm'}
+              variant={'ghost'}
+            >
+              Dismiss
+            </Button>
+          ),
 
+          richColors: true,
+        });
+      }
+    },
+    onError({ error }) {
+      toast.error('Error Found', {
+        description: error?.serverError,
+        className: 'flex items-center w-full ',
+        closeButton: true,
+        classNames: {
+          closeButton: 'toast-close-btn',
+        },
+        cancel: (
+          <Button
+            onClick={() => toast.dismiss()}
+            className='absolute bottom-1 right-1'
+            size={'sm'}
+            variant={'ghost'}
+          >
+            Dismiss
+          </Button>
+        ),
+
+        richColors: true,
+      });
+    },
+  });
   const onSubmit = async (data: InsertCustomerSchemaType) => {
+    executeSave(data);
     console.log(data);
   };
   return (
-    <div className='flex flex-col gap-2 sm:px-8 max-w-sm md:max-w-xl w-full mx-auto'>
-      <div>
-        <h2 className='subheading'>{customer?.id ? 'Edit' : 'New'} Customer</h2>
-      </div>
+    <Card className='w-full max-w-4xl mx-auto'>
+      {/* <DisplayServerActionResponse result={saveResult} /> */}
+      <CardHeader>
+        <CardTitle>{customer?.id ? 'Edit' : 'New'} Customer Form</CardTitle>
+      </CardHeader>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className='flex flex-col md:flex-row  gap-4 w-full border p-2 rounded-lg'
-        >
-          <div className='flex flex-col gap-2 w-full'>
-            <InputWithLabel<InsertCustomerSchemaType>
-              nameInSchema={'firstName'}
-              fieldTitle='First Name'
-            />
-            <InputWithLabel<InsertCustomerSchemaType>
-              nameInSchema={'lastName'}
-              fieldTitle='Last Name'
-            />
-            <TextAreaWithLabel<InsertCustomerSchemaType>
-              nameInSchema={'address1'}
-              fieldTitle='Address 1'
-            />
-            <InputWithLabel<InsertCustomerSchemaType>
-              nameInSchema={'address2'}
-              fieldTitle='Address 2'
-            />
-            <InputWithLabel<InsertCustomerSchemaType>
-              nameInSchema={'city'}
-              fieldTitle='City'
-            />
-          </div>
-          <div className='flex flex-col gap-2 w-full'>
-            <InputWithLabel<InsertCustomerSchemaType>
-              nameInSchema={'phone'}
-              fieldTitle='Phone'
-            />
-            <InputWithLabel<InsertCustomerSchemaType>
-              nameInSchema={'email'}
-              fieldTitle='Email'
-            />
-            <InputWithLabel<InsertCustomerSchemaType>
-              nameInSchema={'postCode'}
-              fieldTitle='Post Code'
-            />
-            <SelectWithLabel<InsertCustomerSchemaType>
-              nameInSchema={'state'}
-              fieldTitle='State'
-              data={CITIES}
-            />
-            <TextAreaWithLabel<InsertCustomerSchemaType>
-              nameInSchema={'notes'}
-              fieldTitle='Notes'
-            />
-            <div className='flex gap-2 my-2'>
-              <Button title='Save' className='w-3/4' type='submit'>
-                Save
-              </Button>
-              <Button
-                onClick={() => {
-                  form.reset(defaultValues);
-                }}
-                className='w-1/4'
-                variant={'destructive'}
-              >
-                Reset
-              </Button>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <CardContent className='grid gap-6 sm:grid-cols-2 r--'>
+            <div className='space-y-4'>
+              <InputWithLabel<InsertCustomerSchemaType>
+                nameInSchema={'firstName'}
+                fieldTitle='First Name'
+              />
+              <InputWithLabel<InsertCustomerSchemaType>
+                nameInSchema={'lastName'}
+                fieldTitle='Last Name'
+              />
+              <TextAreaWithLabel<InsertCustomerSchemaType>
+                nameInSchema={'address1'}
+                fieldTitle='Address 1'
+              />
+              <InputWithLabel<InsertCustomerSchemaType>
+                nameInSchema={'address2'}
+                fieldTitle='Address 2'
+              />
+              <InputWithLabel<InsertCustomerSchemaType>
+                nameInSchema={'city'}
+                fieldTitle='City'
+              />
             </div>
-          </div>
+            <div className='space-y-4'>
+              <InputWithLabel<InsertCustomerSchemaType>
+                nameInSchema={'phone'}
+                fieldTitle='Phone'
+              />
+              <InputWithLabel<InsertCustomerSchemaType>
+                nameInSchema={'email'}
+                fieldTitle='Email'
+              />
+              <InputWithLabel<InsertCustomerSchemaType>
+                nameInSchema={'postCode'}
+                fieldTitle='Post Code'
+              />
+              <SelectWithLabel<InsertCustomerSchemaType>
+                nameInSchema={'state'}
+                fieldTitle='State'
+                data={CITIES}
+              />
+              <TextAreaWithLabel<InsertCustomerSchemaType>
+                nameInSchema={'notes'}
+                fieldTitle='Notes'
+              />
+              {isGranted && customer?.id ? (
+                <CheckboxWithLabel<InsertCustomerSchemaType>
+                  fieldTitle='Active'
+                  message='Check if active'
+                  nameInSchema='active'
+                />
+              ) : null}
+            </div>
+          </CardContent>
+          <CardFooter className='flex justify-between'>
+            <Button
+              onClick={() => {
+                form.reset(defaultValues);
+                resetSaveAction();
+              }}
+              className='px-8'
+              variant={'destructive'}
+            >
+              Reset
+            </Button>
+            <Button
+              title='Save'
+              disabled={isSaving}
+              className='px-8'
+              type='submit'
+            >
+              {isSaving ? (
+                <LoaderCircle className='w-6 h-6  animate-spin' />
+              ) : (
+                'Save'
+              )}
+            </Button>
+          </CardFooter>
         </form>
       </Form>
-    </div>
+    </Card>
   );
 };
 

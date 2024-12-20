@@ -1,13 +1,44 @@
 import { BackButton } from '@/components/BackButton';
 import CustomerForm from '@/components/forms/CustomerForm';
 import { getCustomer } from '@/lib/queries';
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 
+export async function generateMetaData({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    customerId: string | undefined;
+  }>;
+}) {
+  try {
+    const { customerId } = await searchParams;
+
+    if (customerId) {
+      return {
+        title: `Edit Customer ID# ${customerId}`,
+        description: `Edit Customer ID# ${customerId}`,
+      };
+    } else {
+      return {
+        title: 'New Customer',
+        description: 'New Customer',
+      };
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+  }
+}
 type Props = {
   searchParams: Promise<{
     customerId: string | undefined;
   }>;
 };
 const CustomerFormPage: React.FC<Props> = async ({ searchParams }) => {
+  const { getPermission } = getKindeServerSession();
+  const managerPermission = await getPermission('manager');
+  const isManager = managerPermission?.isGranted;
   try {
     const { customerId } = await searchParams;
 
@@ -15,7 +46,6 @@ const CustomerFormPage: React.FC<Props> = async ({ searchParams }) => {
       //editForm
 
       const customer = await getCustomer(parseInt(customerId));
-      console.log(customer);
       if (!customer) {
         return (
           <div>
@@ -28,7 +58,7 @@ const CustomerFormPage: React.FC<Props> = async ({ searchParams }) => {
       return (
         <div>
           <h1>Edit customer form for customer id# {customerId} </h1>
-          <CustomerForm customer={customer} />
+          <CustomerForm customer={customer} isGranted={isManager!} />
         </div>
       );
     } else {
@@ -37,7 +67,7 @@ const CustomerFormPage: React.FC<Props> = async ({ searchParams }) => {
       return (
         <div>
           <h1>New customer form</h1>
-          <CustomerForm />
+          <CustomerForm isGranted={isManager!} />
         </div>
       );
     }

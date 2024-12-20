@@ -12,7 +12,6 @@ import {
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -33,6 +32,8 @@ const SelectWithLabel = <S,>({
   className,
   data,
 }: Props<S>) => {
+  const onlyObjWithName = data.filter((item) => item.name);
+  console.log(onlyObjWithName);
   const { control } = useFormContext();
   return (
     <FormField
@@ -40,7 +41,7 @@ const SelectWithLabel = <S,>({
       name={nameInSchema}
       render={({ field }) => {
         return (
-          <FormItem>
+          <FormItem key={nameInSchema}>
             <FormLabel className='text-base mb-2' htmlFor={nameInSchema}>
               {fieldTitle}
             </FormLabel>
@@ -58,16 +59,14 @@ const SelectWithLabel = <S,>({
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectGroup>
-                  {data.map(({ id, name }) => {
-                    return (
-                      <SelectItem key={`${nameInSchema}_${id}`} value={name}>
-                        {' '}
-                        {name}{' '}
-                      </SelectItem>
-                    );
-                  })}
-                </SelectGroup>
+                {onlyObjWithName.map(({ id, name }) => {
+                  return (
+                    <SelectItem key={id} value={name}>
+                      {' '}
+                      {name}{' '}
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
             <FormMessage withIcon />

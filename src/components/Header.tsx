@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { HomeIcon, File, UsersRound, LogOut } from 'lucide-react';
 import NavButton from './NavButton';
@@ -6,8 +7,14 @@ import { ROUTES } from '@/types/default';
 import DarkModeSwitch from './DarkModeSwitch';
 import { LogoutLink } from '@kinde-oss/kinde-auth-nextjs/components';
 import { Button } from './ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { KindeUser } from '@kinde-oss/kinde-auth-nextjs/types';
 
-const Header = () => {
+type Props = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  user: KindeUser<Record<string, any>>;
+};
+const Header = ({ user }: Props) => {
   return (
     <header
       className='animate-up bg-background h-16 py-4 px-2 border-b 
@@ -29,6 +36,19 @@ const Header = () => {
         </div>
 
         <div className='flex items-center gap-1'>
+          <Button title='profile' className='p-0 h-auto  rounded-full'>
+            <Link href={ROUTES.USER}>
+              <Avatar>
+                <AvatarImage src={user?.picture || ''} />
+                <AvatarFallback>
+                  {`${user?.given_name?.charAt(0)} ${user?.family_name?.charAt(
+                    0
+                  )}`}{' '}
+                </AvatarFallback>
+              </Avatar>
+            </Link>
+          </Button>
+
           <NavButton label='Tickets' Icon={File} href={ROUTES.TICKETS} />
           <NavButton
             label='customer'
