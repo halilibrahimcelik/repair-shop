@@ -1,7 +1,7 @@
 import { db } from '@/db';
 import { customersTable, ticketsTable } from '@/db/schema';
 
-import { eq, ilike, or } from 'drizzle-orm';
+import { eq, ilike, or, sql } from 'drizzle-orm';
 import { captureSentryException } from '../utils';
 
 export const getCustomer = async (id: number) => {
@@ -56,12 +56,14 @@ export const getCustomerSearchResults = async (searchText: string) => {
       .from(customersTable)
       .where(
         or(
-          ilike(customersTable.firstName, `%${searchText}%`),
-          ilike(customersTable.lastName, `%${searchText}%`),
+          // ilike(customersTable.firstName, `%${searchText}%`),
+          // ilike(customersTable.lastName, `%${searchText}%`),
           ilike(customersTable.email, `%${searchText}%`),
-          ilike(customersTable.state, `%${searchText}%`),
-          ilike(customersTable.address1, `%${searchText}%`),
-          ilike(customersTable.phone, `%${searchText}%`)
+          ilike(customersTable.city, `%${searchText}%`),
+          ilike(customersTable.phone, `%${searchText}%`),
+          sql`lower(concat(${customersTable.firstName}, ' ', ${
+            customersTable.lastName
+          })) LIKE ${`%${searchText.toLocaleLowerCase().replace(' ', '%')}%`}`
         )
       );
     return customers;
