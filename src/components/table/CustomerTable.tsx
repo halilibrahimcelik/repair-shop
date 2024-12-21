@@ -12,12 +12,11 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableHeader,
   TableRow,
 } from '../ui/table';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 
 type Props = {
   data: SelectCusctomerSchemaType[];
@@ -49,15 +48,24 @@ const CustomerTable: React.FC<Props> = ({ data }) => {
   return (
     <div>
       <h1>Customer Table</h1>
-      <div className='rounded-lm border'>
-        <Table>
-          <TableHeader>
+      <div className='rounded-xl border'>
+        <Table className='w-full'>
+          <TableHeader className='rounded-tl-lg overflow-hidden'>
             {table.getHeaderGroups().map((headerGroup) => {
               return (
                 <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
+                  {headerGroup.headers.map((header, index) => {
                     return (
-                      <TableHead key={header.id}>
+                      <TableHead
+                        className={`
+                      bg-secondary  ${index === 0 ? 'rounded-tl-lg' : ''} ${
+                          index === headerGroup.headers.length - 1
+                            ? 'rounded-tr-lg'
+                            : ''
+                        }
+                      `}
+                        key={header.id}
+                      >
                         {header.isPlaceholder
                           ? null
                           : flexRender(
@@ -76,6 +84,11 @@ const CustomerTable: React.FC<Props> = ({ data }) => {
               table.getRowModel().rows.map((row) => {
                 return (
                   <TableRow
+                    onClick={() => {
+                      router.push(
+                        `/customers/form?customerId=${row.original.id}`
+                      );
+                    }}
                     key={row.id}
                     data-state={row.getIsSelected() && 'selected'}
                   >

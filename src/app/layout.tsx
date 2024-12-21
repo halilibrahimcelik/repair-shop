@@ -60,7 +60,7 @@ export default function RootLayout({
         >
           {children}
           <Toaster visibleToasts={2} position='bottom-center' />
-          <NextTopLoader speed={50000} color='#ad7ebc' showSpinner={false} />
+          <NextTopLoader color='#ad7ebc' showSpinner={false} />
         </ThemeProvider>
       </body>
     </html>

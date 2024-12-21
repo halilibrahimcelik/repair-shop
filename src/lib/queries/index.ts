@@ -34,6 +34,20 @@ export const getTicket = async (id: number) => {
     });
   }
 };
+export const getAllCustomers = async () => {
+  try {
+    const customers = await db.select().from(customersTable);
+    return customers;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(error);
+      captureSentryException({
+        message: 'Error in getAllCustomers',
+        title: 'Error in getAllCustomers',
+      });
+    }
+  }
+};
 
 export const getCustomerSearchResults = async (searchText: string) => {
   try {

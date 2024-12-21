@@ -8,7 +8,6 @@ import {
   DropdownMenu,
   DropdownMenuItem,
   DropdownMenuContent,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
@@ -30,11 +29,10 @@ function CustomersDropdown() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-auto'>
-        <DropdownMenuLabel>Customers</DropdownMenuLabel>
-        <DropdownMenuSeparator />
         <DropdownMenuItem asChild onClick={() => setIsOpen(false)}>
-          <Link href={ROUTES.CUSTOMERS}>Search Customers</Link>
+          <Link href={ROUTES.CUSTOMERS}>Customers</Link>
         </DropdownMenuItem>
+        <DropdownMenuSeparator />
 
         <DropdownMenuItem asChild onClick={() => setIsOpen(false)}>
           <Link className='w-full ' href={ROUTES.ADD_CUSTOMER}>
