@@ -32,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      {/* <head>
+      <head>
         <link
           rel='icon'
           type='image/png'
@@ -48,7 +48,7 @@ export default function RootLayout({
         />
         <meta name='apple-mobile-web-app-title' content='Repair Shop' />
         <link rel='manifest' href='/site.webmanifest' />
-      </head> */}
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

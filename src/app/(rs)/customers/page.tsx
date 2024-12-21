@@ -1,6 +1,7 @@
 import React from 'react';
 import { getCustomerSearchResults } from '@/lib/queries';
 import SearchForm from '@/components/SearchForm';
+import CustomerTable from '@/components/table/CustomerTable';
 type Props = {
   searchParams: Promise<{ searchText: string | undefined }>;
 };
@@ -20,7 +21,7 @@ const CustomerPage = async ({ searchParams }: Props) => {
       <SearchForm action='/customers' searchText={searchText} />
       <h1>
         Customer Search Results for: {searchText}
-        {JSON.stringify(results)}
+        <CustomerTable data={results!} />
       </h1>
     </div>
   );
