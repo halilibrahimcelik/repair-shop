@@ -15,7 +15,7 @@ import Link from 'next/link';
 import { ROUTES } from '@/types/default';
 
 function CustomersDropdown() {
-  const [isOpen, setIsOpen] = React.useState(true);
+  const [isOpen, setIsOpen] = React.useState(false);
   return (
     <DropdownMenu onOpenChange={setIsOpen} open={isOpen}>
       <DropdownMenuTrigger asChild>

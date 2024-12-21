@@ -1,19 +1,29 @@
 import React from 'react';
-import { getCustomerSearchResults } from '@/lib/queries';
+import { getAllCustomers, getCustomerSearchResults } from '@/lib/queries';
 import SearchForm from '@/components/SearchForm';
 import CustomerTable from '@/components/table/CustomerTable';
 type Props = {
-  searchParams: Promise<{ searchText: string | undefined }>;
+  searchParams: Promise<{
+    searchText: string | undefined;
+    allCustomers: string | undefined;
+  }>;
 };
 export const metadata = {
   title: 'Customer Search',
   description: 'Customer Search',
 };
 const CustomerPage = async ({ searchParams }: Props) => {
-  const { searchText } = await searchParams;
+  const { searchText, allCustomers } = await searchParams;
 
   if (!searchText) {
-    return <SearchForm action='/customers' />;
+    const allCusomerList = await getAllCustomers();
+    console.log(allCustomers);
+    return (
+      <>
+        <SearchForm action='/customers' />
+        {allCustomers === 'true' && <CustomerTable data={allCusomerList!} />}
+      </>
+    );
   }
   const results = await getCustomerSearchResults(searchText);
   return (
