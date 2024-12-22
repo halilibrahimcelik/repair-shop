@@ -17,11 +17,13 @@ const CustomerPage = async ({ searchParams }: Props) => {
 
   if (!searchText) {
     const allCusomerList = await getAllCustomers();
-    console.log(allCustomers);
+
     return (
       <>
         <SearchForm action='/customers' />
-        {allCustomers === 'true' && <CustomerTable data={allCusomerList!} />}
+        {(allCustomers === 'true' || searchText === '') && (
+          <CustomerTable data={allCusomerList!} />
+        )}
       </>
     );
   }
