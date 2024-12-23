@@ -30,7 +30,7 @@ function CustomersDropdown() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-auto'>
         <DropdownMenuItem asChild onClick={() => setIsOpen(false)}>
-          <Link href={ROUTES.CUSTOMERS}>Customers</Link>
+          <Link href={ROUTES.CUSTOMERS + '?allCustomers=true'}>Customers</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
 
