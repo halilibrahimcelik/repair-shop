@@ -2,7 +2,6 @@
 import { SelectCusctomerSchemaType } from '@/zod-schemas/customer';
 
 import {
-  createColumnHelper,
   flexRender,
   getCoreRowModel,
   SortingState,
@@ -24,6 +23,7 @@ import { useRouter } from 'nextjs-toploader/app';
 import { useState } from 'react';
 import { Button } from '../ui/button';
 import { ArrowUpDown } from 'lucide-react';
+import { toast } from 'sonner';
 
 type Props = {
   data: SelectCusctomerSchemaType[];
@@ -42,7 +42,6 @@ const CustomerTable: React.FC<Props> = ({ data }) => {
             variant='ghost'
             onClick={() => {
               column.toggleSorting(column.getIsSorted() === 'asc');
-              console.log('test');
             }}
           >
             First Name
@@ -79,6 +78,17 @@ const CustomerTable: React.FC<Props> = ({ data }) => {
             variant={'ghost'}
             onClick={(e) => {
               e.stopPropagation();
+              toast.success(`${row.getValue('email')} coppied`, {
+                duration: 1200,
+
+                dismissible: true,
+                classNames: {
+                  closeButton: 'toast-close-btn',
+                },
+                closeButton: true,
+                className: 'w-fit',
+                richColors: true,
+              });
               navigator.clipboard.writeText(row.getValue('email'));
             }}
           >
