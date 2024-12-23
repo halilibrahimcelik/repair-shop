@@ -2,7 +2,11 @@ import SearchForm from '@/components/SearchForm';
 import TicketTable from '@/components/table/TicketTable';
 import { getTicketSearchResults, getOpenTickets } from '@/lib/queries';
 import React from 'react';
-
+import {
+  QueryClient,
+  HydrationBoundary,
+  dehydrate,
+} from '@tanstack/react-query';
 export const metadata = {
   title: 'Ticket Search',
   description: 'Ticket Search',
@@ -13,25 +17,36 @@ type Props = {
 
 const TicketsPage = async ({ searchParams }: Props) => {
   const { searchText } = await searchParams;
+  const queryClient = new QueryClient();
   if (!searchText) {
-    const tickets = await getOpenTickets();
-    console.log(tickets?.length);
+    // const tickets = await getOpenTickets();
+    await queryClient.prefetchQuery({
+      queryKey: ['open-tickets'],
+      queryFn: async () => await getOpenTickets(),
+    });
     return (
-      <div>
+      <HydrationBoundary state={dehydrate(queryClient)}>
         <SearchForm action='/tickets' />
-      </div>
+        <TicketTable isOpenTickets />
+      </HydrationBoundary>
+    );
+  } else {
+    await queryClient.prefetchQuery({
+      queryKey: ['searched-tickets'],
+      queryFn: async () => await getTicketSearchResults(searchText),
+    });
+    return (
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <div>
+          <SearchForm action='/tickets' searchText={searchText} />
+          <h1>
+            Ticket Search Results for: {searchText}
+            <TicketTable searchText={searchText} />
+          </h1>
+        </div>
+      </HydrationBoundary>
     );
   }
-  const results = await getTicketSearchResults(searchText);
-  return (
-    <div>
-      <SearchForm action='/tickets' searchText={searchText} />
-      <h1>
-        Ticket Search Results for: {searchText}
-        <TicketTable data={results!} />
-      </h1>
-    </div>
-  );
 };
 
 export default TicketsPage;

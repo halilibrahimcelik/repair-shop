@@ -1,5 +1,4 @@
 'use client';
-import { SelectTicketSchemaType } from '@/zod-schemas/tickets';
 import {
   flexRender,
   getCoreRowModel,
@@ -24,12 +23,19 @@ import { Button } from '../ui/button';
 import { ArrowUpDown, CircleXIcon, CircleCheckIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { TicketSearchResultsType } from '@/lib/queries';
+import { useGetAllOpenTickets, useGetSearchedTickets } from '@/lib/get-tickets';
 
 type Props = {
-  data: TicketSearchResultsType;
+  searchText?: string;
+  isOpenTickets?: boolean;
 };
 type RowType = NonNullable<TicketSearchResultsType>[0];
-const TicketTable: React.FC<Props> = ({ data }) => {
+const TicketTable: React.FC<Props> = ({
+  searchText,
+  isOpenTickets = false,
+}) => {
+  const { data } = useGetSearchedTickets(searchText!);
+  const { data: openTicketsData } = useGetAllOpenTickets();
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const router = useRouter();
@@ -119,14 +125,20 @@ const TicketTable: React.FC<Props> = ({ data }) => {
         const completed = row.getValue('completed') as boolean;
 
         return (
-          <div className='lowercase'>{completed ? 'Completed' : 'Open'}</div>
+          <div className='lowercase  place-items-center'>
+            {completed ? (
+              <CircleCheckIcon className='text-green-300' />
+            ) : (
+              <CircleXIcon className='text-red-300' />
+            )}
+          </div>
         );
       },
     },
   ];
-
+  console.log(data);
   const table = useReactTable({
-    data: data!,
+    data: isOpenTickets ? openTicketsData! : data!,
     columns,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
@@ -140,8 +152,8 @@ const TicketTable: React.FC<Props> = ({ data }) => {
   });
 
   return (
-    <div>
-      <h1 className='subheading'>Ticket Table</h1>
+    <div className='my-10'>
+      <h1 className='subheading mb-4'>Ticket Table</h1>
       <div className='rounded-xl border'>
         <Table className='w-full'>
           <TableHeader className='rounded-tl-lg overflow-hidden'>
@@ -179,9 +191,7 @@ const TicketTable: React.FC<Props> = ({ data }) => {
                 return (
                   <TableRow
                     onClick={() => {
-                      router.push(
-                        `/customers/form?customerId=${row.original.id}`
-                      );
+                      router.push(`/tickets/form?ticketId=${row.original.id}`);
                     }}
                     key={row.id}
                     data-state={row.getIsSelected() && 'selected'}

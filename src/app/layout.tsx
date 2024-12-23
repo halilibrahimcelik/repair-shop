@@ -4,6 +4,8 @@ import './globals.css';
 import { ThemeProvider } from '@/providers/ThemeProvider';
 import { Toaster } from '@/components/ui/sonner';
 import NextTopLoader from 'nextjs-toploader';
+import { QueryProviderComponent } from '@/providers/QueryClientProvider';
+// import { QueryProviderComponent } from '@/providers/QueryClientProvider';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -52,16 +54,18 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <Toaster visibleToasts={2} position='bottom-center' />
-          <NextTopLoader color='#ad7ebc' showSpinner={false} />
-        </ThemeProvider>
+        <QueryProviderComponent>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='system'
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <Toaster visibleToasts={2} position='bottom-center' />
+            <NextTopLoader color='#ad7ebc' showSpinner={false} />
+          </ThemeProvider>
+        </QueryProviderComponent>
       </body>
     </html>
   );

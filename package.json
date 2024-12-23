@@ -28,6 +28,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-switch": "^1.1.1",
     "@sentry/nextjs": "8",
+    "@tanstack/react-query": "^5.62.9",
     "@tanstack/react-table": "^8.20.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -49,6 +50,7 @@
   "devDependencies": {
     "@babel/preset-typescript": "^7.26.0",
     "@jest/globals": "^29.7.0",
+    "@tanstack/eslint-plugin-query": "^5.62.9",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
