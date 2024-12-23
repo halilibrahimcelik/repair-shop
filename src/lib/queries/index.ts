@@ -1,7 +1,7 @@
 import { db } from '@/db';
 import { customersTable, ticketsTable } from '@/db/schema';
 
-import { eq, ilike, or, sql } from 'drizzle-orm';
+import { asc, eq, ilike, or, sql } from 'drizzle-orm';
 import { captureSentryException } from '../utils';
 
 export const getCustomer = async (id: number) => {
@@ -80,6 +80,7 @@ export const getTicketSearchResults = async (searchText: string) => {
   try {
     const tickets = await db
       .select({
+        id: ticketsTable.id,
         ticketDate: ticketsTable.createdAt,
         title: ticketsTable.title,
         firstName: customersTable.firstName,
@@ -87,22 +88,23 @@ export const getTicketSearchResults = async (searchText: string) => {
         email: customersTable.email,
         phone: customersTable.phone,
         tech: ticketsTable.tech,
+        completed: ticketsTable.completed,
       })
       .from(ticketsTable)
       .leftJoin(customersTable, eq(ticketsTable.customersId, customersTable.id))
       .where(
         or(
           ilike(ticketsTable.title, `%${searchText}%`),
-          ilike(ticketsTable.description, `%${searchText}%`),
           ilike(ticketsTable.tech, `%${searchText}%`),
-          ilike(customersTable.firstName, `%${searchText}%`),
-          ilike(customersTable.lastName, `%${searchText}%`),
           ilike(customersTable.email, `%${searchText}%`),
-          ilike(customersTable.state, `%${searchText}%`),
-          ilike(customersTable.address1, `%${searchText}%`),
-          ilike(customersTable.phone, `%${searchText}%`)
+          ilike(customersTable.phone, `%${searchText}%`),
+          ilike(customersTable.city, `%${searchText}%`),
+          sql`lower(concat(${customersTable.firstName}, ' ', ${
+            customersTable.lastName
+          })) LIKE ${`%${searchText.toLocaleLowerCase().replace(' ', '%')}%`}`
         )
-      );
+      )
+      .orderBy(asc(ticketsTable.createdAt));
     return tickets;
     //ilike case insensitive search
   } catch (error) {
@@ -117,6 +119,7 @@ export const getOpenTickets = async () => {
   try {
     const results = await db
       .select({
+        id: ticketsTable.id,
         ticketDate: ticketsTable.createdAt,
         title: ticketsTable.title,
         firstName: customersTable.firstName,
@@ -124,10 +127,12 @@ export const getOpenTickets = async () => {
         email: customersTable.email,
         phone: customersTable.phone,
         tech: ticketsTable.tech,
+        completed: ticketsTable.completed,
       })
       .from(ticketsTable)
       .leftJoin(customersTable, eq(ticketsTable.customersId, customersTable.id))
-      .where(eq(ticketsTable.completed, false));
+      .where(eq(ticketsTable.completed, false))
+      .orderBy(asc(ticketsTable.createdAt));
     return results;
   } catch (error) {
     console.log(error);
@@ -137,3 +142,7 @@ export const getOpenTickets = async () => {
     });
   }
 };
+
+export type TicketSearchResultsType = Awaited<
+  ReturnType<typeof getTicketSearchResults>
+>;

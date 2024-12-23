@@ -1,4 +1,5 @@
 import SearchForm from '@/components/SearchForm';
+import TicketTable from '@/components/table/TicketTable';
 import { getTicketSearchResults, getOpenTickets } from '@/lib/queries';
 import React from 'react';
 
@@ -18,18 +19,16 @@ const TicketsPage = async ({ searchParams }: Props) => {
     return (
       <div>
         <SearchForm action='/tickets' />
-        {JSON.stringify(tickets)}
       </div>
     );
   }
   const results = await getTicketSearchResults(searchText);
-  console.log(results);
   return (
     <div>
       <SearchForm action='/tickets' searchText={searchText} />
       <h1>
         Ticket Search Results for: {searchText}
-        {JSON.stringify(results)}
+        <TicketTable data={results!} />
       </h1>
     </div>
   );
