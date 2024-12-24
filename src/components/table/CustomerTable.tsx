@@ -24,13 +24,20 @@ import { useState } from 'react';
 import { Button } from '../ui/button';
 import { ArrowUpDown } from 'lucide-react';
 import { toast } from 'sonner';
+import {
+  useGetAllCustomers,
+  useGetSearchedCustomers,
+} from '@/lib/get-customers';
+import TableSkeleton from './TableSkeleton';
 
 type Props = {
-  data: SelectCusctomerSchemaType[];
+  searchText?: string;
+  isAllCustomers?: boolean;
 };
-const CustomerTable: React.FC<Props> = ({ data }) => {
+const CustomerTable: React.FC<Props> = ({ searchText, isAllCustomers }) => {
   const [sorting, setSorting] = useState<SortingState>([]);
-
+  const { data: allCustomers } = useGetAllCustomers();
+  const { data, isFetching } = useGetSearchedCustomers(searchText!);
   const router = useRouter();
 
   const columns: ColumnDef<SelectCusctomerSchemaType>[] = [
@@ -121,7 +128,7 @@ const CustomerTable: React.FC<Props> = ({ data }) => {
   ];
 
   const table = useReactTable({
-    data,
+    data: isAllCustomers ? allCustomers! : data!,
     columns,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
@@ -158,69 +165,73 @@ const CustomerTable: React.FC<Props> = ({ data }) => {
     <div className='my-10'>
       <h1 className='subheading mb-4'>Customer Table</h1>
       <div className='rounded-xl border'>
-        <Table className='w-full'>
-          <TableHeader className='rounded-tl-lg overflow-hidden'>
-            {table.getHeaderGroups().map((headerGroup) => {
-              return (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header, index) => {
-                    return (
-                      <TableHead
-                        className={`
-                      bg-secondary  ${index === 0 ? 'rounded-tl-lg' : ''} ${
-                          index === headerGroup.headers.length - 1
-                            ? 'rounded-tr-lg'
-                            : ''
-                        }
-                      `}
-                        key={header.id}
-                      >
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.length > 0 ? (
-              table.getRowModel().rows.map((row) => {
+        {isFetching ? (
+          <TableSkeleton headersArray={headerArray} rowArray={rowArray} />
+        ) : (
+          <Table className='w-full'>
+            <TableHeader className='rounded-tl-lg overflow-hidden'>
+              {table.getHeaderGroups().map((headerGroup) => {
                 return (
-                  <TableRow
-                    onClick={() => {
-                      router.push(
-                        `/customers/form?customerId=${row.original.id}`
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header, index) => {
+                      return (
+                        <TableHead
+                          className={`
+                      bg-secondary  ${index === 0 ? 'rounded-tl-lg' : ''} ${
+                            index === headerGroup.headers.length - 1
+                              ? 'rounded-tr-lg'
+                              : ''
+                          }
+                      `}
+                          key={header.id}
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </TableHead>
                       );
-                    }}
-                    key={row.id}
-                    data-state={row.getIsSelected() && 'selected'}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
+                    })}
                   </TableRow>
                 );
-              })
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className=' text-center'>
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              })}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows.length > 0 ? (
+                table.getRowModel().rows.map((row) => {
+                  return (
+                    <TableRow
+                      onClick={() => {
+                        router.push(
+                          `/customers/form?customerId=${row.original.id}`
+                        );
+                      }}
+                      key={row.id}
+                      data-state={row.getIsSelected() && 'selected'}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  );
+                })
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className=' text-center'>
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        )}
       </div>
     </div>
   );
