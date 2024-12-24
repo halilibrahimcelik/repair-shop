@@ -133,10 +133,30 @@ const CustomerTable: React.FC<Props> = ({ data }) => {
       sorting,
     },
   });
-
+  const headerArray = [
+    'First Name',
+    'Last Name',
+    'Address',
+    'Email',
+    'City',
+    'Phone',
+    'State',
+  ];
+  const rowArray = [
+    'row1',
+    'row2',
+    'row3',
+    'row4',
+    'row5',
+    'row6',
+    'row7',
+    'row8',
+    'row9',
+    'row10',
+  ];
   return (
-    <div>
-      <h1>Customer Table</h1>
+    <div className='my-10'>
+      <h1 className='subheading mb-4'>Customer Table</h1>
       <div className='rounded-xl border'>
         <Table className='w-full'>
           <TableHeader className='rounded-tl-lg overflow-hidden'>

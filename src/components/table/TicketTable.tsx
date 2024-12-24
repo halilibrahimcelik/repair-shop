@@ -24,6 +24,7 @@ import { ArrowUpDown, CircleXIcon, CircleCheckIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { TicketSearchResultsType } from '@/lib/queries';
 import { useGetAllOpenTickets, useGetSearchedTickets } from '@/lib/get-tickets';
+import TableSkeleton from './TableSkeleton';
 
 type Props = {
   searchText?: string;
@@ -34,10 +35,14 @@ const TicketTable: React.FC<Props> = ({
   searchText,
   isOpenTickets = false,
 }) => {
-  const { data } = useGetSearchedTickets(searchText!);
+  const { data, isFetching, isRefetching, isPending } = useGetSearchedTickets(
+    searchText!
+  );
   const { data: openTicketsData } = useGetAllOpenTickets();
   const [sorting, setSorting] = useState<SortingState>([]);
-
+  console.log(isFetching);
+  console.log(isPending, 'isPending');
+  console.log(isRefetching, 'isRefeching');
   const router = useRouter();
 
   const columns: ColumnDef<RowType>[] = [
@@ -136,7 +141,7 @@ const TicketTable: React.FC<Props> = ({
       },
     },
   ];
-  console.log(data);
+
   const table = useReactTable({
     data: isOpenTickets ? openTicketsData! : data!,
     columns,
@@ -150,72 +155,97 @@ const TicketTable: React.FC<Props> = ({
       sorting,
     },
   });
-
+  const headersArray = [
+    'Ticket Date',
+    'Title',
+    'First Name',
+    'Last Name',
+    'Email',
+    'Completed',
+  ];
+  const rowArray = [
+    'row1',
+    'row2',
+    'row3',
+    'row4',
+    'row5',
+    'row6',
+    'row7',
+    'row8',
+    'row9',
+    'row10',
+  ];
   return (
     <div className='my-10'>
       <h1 className='subheading mb-4'>Ticket Table</h1>
       <div className='rounded-xl border'>
-        <Table className='w-full'>
-          <TableHeader className='rounded-tl-lg overflow-hidden'>
-            {table.getHeaderGroups().map((headerGroup) => {
-              return (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header, index) => {
-                    return (
-                      <TableHead
-                        className={`
-                      bg-secondary  ${index === 0 ? 'rounded-tl-lg' : ''} ${
-                          index === headerGroup.headers.length - 1
-                            ? 'rounded-tr-lg'
-                            : ''
-                        }
-                      `}
-                        key={header.id}
-                      >
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.length > 0 ? (
-              table.getRowModel().rows.map((row) => {
+        {isFetching ? (
+          <TableSkeleton headersArray={headersArray} rowArray={rowArray} />
+        ) : (
+          <Table className='w-full'>
+            <TableHeader className='rounded-tl-lg overflow-hidden'>
+              {table.getHeaderGroups().map((headerGroup) => {
                 return (
-                  <TableRow
-                    onClick={() => {
-                      router.push(`/tickets/form?ticketId=${row.original.id}`);
-                    }}
-                    key={row.id}
-                    data-state={row.getIsSelected() && 'selected'}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header, index) => {
+                      return (
+                        <TableHead
+                          className={`
+                      bg-secondary  ${index === 0 ? 'rounded-tl-lg' : ''} ${
+                            index === headerGroup.headers.length - 1
+                              ? 'rounded-tr-lg'
+                              : ''
+                          }
+                      `}
+                          key={header.id}
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </TableHead>
+                      );
+                    })}
                   </TableRow>
                 );
-              })
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className=' text-center'>
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              })}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows.length > 0 ? (
+                table.getRowModel().rows.map((row) => {
+                  return (
+                    <TableRow
+                      onClick={() => {
+                        router.push(
+                          `/tickets/form?ticketId=${row.original.id}`
+                        );
+                      }}
+                      key={row.id}
+                      data-state={row.getIsSelected() && 'selected'}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  );
+                })
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className=' text-center'>
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        )}
       </div>
     </div>
   );
