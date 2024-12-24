@@ -34,7 +34,6 @@ import { useAction } from 'next-safe-action/hooks';
 import { LoaderCircle } from 'lucide-react';
 import { saveTicketAction } from '@/app/actions/saveTicketAction';
 import { toast } from 'sonner';
-import { QueryClient } from '@tanstack/react-query';
 type Props = {
   customer: SelectCusctomerSchemaType;
   ticket?: SelectTicketSchemaType;
@@ -52,7 +51,6 @@ const TicketsForm: React.FC<Props> = ({
   isEditable = true,
 }) => {
   const isManager = Array.isArray(techs);
-  const queryClient = new QueryClient();
 
   const defaultValues: InsertTicketSchemaType = {
     customersId: customer.id ?? ticket?.customersId,
@@ -123,10 +121,6 @@ const TicketsForm: React.FC<Props> = ({
   });
   const onSubmitHandler = async (data: InsertTicketSchemaType) => {
     executeSave(data);
-    queryClient.invalidateQueries({
-      queryKey: ['open-tickets'],
-      exact: true,
-    });
   };
   return (
     <Card className='w-full max-w-4xl mx-auto my-10'>

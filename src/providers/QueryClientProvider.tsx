@@ -1,4 +1,5 @@
 'use client';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import {
   QueryClientProvider,
@@ -10,7 +11,7 @@ import { toast } from 'sonner';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 10,
+      staleTime: 1000 * 6,
       refetchOnWindowFocus: true,
     },
   },
@@ -27,6 +28,9 @@ export const QueryProviderComponent = ({
   children: React.ReactNode;
 }) => {
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      {children}
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 };

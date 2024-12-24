@@ -33,7 +33,6 @@ const SelectWithLabel = <S,>({
   data,
 }: Props<S>) => {
   const onlyObjWithName = data.filter((item) => item.name);
-  console.log(onlyObjWithName);
   const { control } = useFormContext();
   return (
     <FormField

@@ -26,12 +26,10 @@ import { useAction } from 'next-safe-action/hooks';
 import { saveCustomerAction } from '@/app/actions/saveCustomerAction';
 import { CITIES } from '@/constants/cities';
 import { LoaderCircle } from 'lucide-react';
-import { QueryClient } from '@tanstack/react-query';
 type Props = {
   customer?: SelectCusctomerSchemaType;
   isGranted: boolean;
 };
-const queryClient = new QueryClient();
 const CustomerForm: React.FC<Props> = ({ customer, isGranted }) => {
   const defaultValues: InsertCustomerSchemaType = {
     id: customer?.id || 0,
@@ -108,11 +106,6 @@ const CustomerForm: React.FC<Props> = ({ customer, isGranted }) => {
   });
   const onSubmit = async (data: InsertCustomerSchemaType) => {
     executeSave(data);
-    queryClient.invalidateQueries({
-      queryKey: ['searched-customers'],
-      exact: true,
-      refetchType: 'active',
-    });
   };
   return (
     <Card className='w-full max-w-4xl mx-auto'>
