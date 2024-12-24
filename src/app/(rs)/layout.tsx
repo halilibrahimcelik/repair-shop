@@ -1,4 +1,4 @@
-import Header from '@/components/Header';
+import Header from '@/components/header/Header';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 type Props = { children: React.ReactNode };
 export default async function RSLayout({ children }: Props) {

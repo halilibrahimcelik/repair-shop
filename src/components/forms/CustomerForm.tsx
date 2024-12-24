@@ -31,12 +31,6 @@ type Props = {
   isGranted: boolean;
 };
 const CustomerForm: React.FC<Props> = ({ customer, isGranted }) => {
-  //const permissionObj = getPermissions();
-  // const isAuthorized =
-  //   !isLoading &&
-  //   permissionObj.permissions.some(
-  //     (perm) => perm === 'manager' || perm === 'admin'
-  //   );
   const defaultValues: InsertCustomerSchemaType = {
     id: customer?.id || 0,
     firstName: customer?.firstName || '',
@@ -112,7 +106,6 @@ const CustomerForm: React.FC<Props> = ({ customer, isGranted }) => {
   });
   const onSubmit = async (data: InsertCustomerSchemaType) => {
     executeSave(data);
-    console.log(data);
   };
   return (
     <Card className='w-full max-w-4xl mx-auto'>

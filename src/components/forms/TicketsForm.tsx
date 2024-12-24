@@ -51,6 +51,7 @@ const TicketsForm: React.FC<Props> = ({
   isEditable = true,
 }) => {
   const isManager = Array.isArray(techs);
+
   const defaultValues: InsertTicketSchemaType = {
     customersId: customer.id ?? ticket?.customersId,
     id: ticket?.id || 'New',
@@ -119,11 +120,10 @@ const TicketsForm: React.FC<Props> = ({
     },
   });
   const onSubmitHandler = async (data: InsertTicketSchemaType) => {
-    console.log(data);
     executeSave(data);
   };
   return (
-    <Card className='w-full max-w-4xl mx-auto'>
+    <Card className='w-full max-w-4xl mx-auto my-10'>
       <CardHeader className='text-2xl'>
         <CardTitle>
           {ticket?.id && isEditable

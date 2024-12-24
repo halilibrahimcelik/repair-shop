@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Switch } from './ui/switch';
+import { Switch } from '../ui/switch';
 import { useTheme } from 'next-themes';
 
 const DarkModeSwitch = () => {

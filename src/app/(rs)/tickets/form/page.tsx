@@ -131,6 +131,7 @@ const TicketFormPage: React.FC<Props> = async ({ searchParams }) => {
         return (
           <div>
             <TicketsForm customer={customerX!} ticket={ticket} techs={techs} />
+            <BackButton title='Back' size='default' variants='default' />
           </div>
         );
       } else {
@@ -143,6 +144,7 @@ const TicketFormPage: React.FC<Props> = async ({ searchParams }) => {
               ticket={ticket}
               isEditable={editable}
             />
+            <BackButton title='Back' size='default' variants='default' />
           </div>
         );
       }

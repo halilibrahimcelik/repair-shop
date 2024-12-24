@@ -3,6 +3,10 @@ import localFont from 'next/font/local';
 import './globals.css';
 import { ThemeProvider } from '@/providers/ThemeProvider';
 import { Toaster } from '@/components/ui/sonner';
+import NextTopLoader from 'nextjs-toploader';
+import { QueryProviderComponent } from '@/providers/QueryClientProvider';
+// import { QueryProviderComponent } from '@/providers/QueryClientProvider';
+
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
   variable: '--font-geist-sans',
@@ -30,7 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      {/* <head>
+      <head>
         <link
           rel='icon'
           type='image/png'
@@ -46,23 +50,22 @@ export default function RootLayout({
         />
         <meta name='apple-mobile-web-app-title' content='Repair Shop' />
         <link rel='manifest' href='/site.webmanifest' />
-      </head> */}
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <Toaster
-            duration={22000}
-            visibleToasts={2}
-            position='bottom-center'
-          />
-        </ThemeProvider>
+        <QueryProviderComponent>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='system'
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <Toaster visibleToasts={2} position='bottom-center' />
+            <NextTopLoader color='#ad7ebc' showSpinner={false} />
+          </ThemeProvider>
+        </QueryProviderComponent>
       </body>
     </html>
   );
