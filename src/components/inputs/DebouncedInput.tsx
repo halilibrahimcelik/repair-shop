@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Input } from '@/components/ui/input';
 
 function DebouncedInput({
   value: initialValue,
@@ -22,10 +23,11 @@ function DebouncedInput({
     }, debounce);
 
     return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   return (
-    <input
+    <Input
       {...props}
       value={value}
       onChange={(e) => setValue(e.target.value)}
