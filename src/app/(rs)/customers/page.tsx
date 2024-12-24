@@ -23,7 +23,6 @@ const CustomerPage = async ({ searchParams }: Props) => {
 
   if (!searchText) {
     // const allCusomerList = await getAllCustomers();
-    console.log('heey');
     await queryClient.prefetchQuery({
       queryKey: ['get-all-customers'],
       queryFn: async () => await getAllCustomers(),

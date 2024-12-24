@@ -7,6 +7,7 @@ import {
   ColumnDef,
   getSortedRowModel,
   getFilteredRowModel,
+  getPaginationRowModel,
 } from '@tanstack/react-table';
 
 import {
@@ -20,7 +21,13 @@ import {
 import { useRouter } from 'nextjs-toploader/app';
 import { useState } from 'react';
 import { Button } from '../ui/button';
-import { ArrowUpDown, CircleXIcon, CircleCheckIcon } from 'lucide-react';
+import {
+  ArrowUpDown,
+  CircleXIcon,
+  CircleCheckIcon,
+  ArrowBigLeft,
+  ArrowBigRight,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { TicketSearchResultsType } from '@/lib/queries';
 import { useGetAllOpenTickets, useGetSearchedTickets } from '@/lib/get-tickets';
@@ -35,14 +42,10 @@ const TicketTable: React.FC<Props> = ({
   searchText,
   isOpenTickets = false,
 }) => {
-  const { data, isFetching, isRefetching, isPending } = useGetSearchedTickets(
-    searchText!
-  );
+  const { data, isFetching } = useGetSearchedTickets(searchText!);
   const { data: openTicketsData } = useGetAllOpenTickets();
   const [sorting, setSorting] = useState<SortingState>([]);
-  console.log(isFetching);
-  console.log(isPending, 'isPending');
-  console.log(isRefetching, 'isRefeching');
+
   const router = useRouter();
 
   const columns: ColumnDef<RowType>[] = [
@@ -149,8 +152,14 @@ const TicketTable: React.FC<Props> = ({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     enableSorting: true,
-
+    initialState: {
+      pagination: {
+        pageSize: 10,
+        pageIndex: 0,
+      },
+    },
     state: {
       sorting,
     },
@@ -182,69 +191,111 @@ const TicketTable: React.FC<Props> = ({
         {isFetching ? (
           <TableSkeleton headersArray={headersArray} rowArray={rowArray} />
         ) : (
-          <Table className='w-full'>
-            <TableHeader className='rounded-tl-lg overflow-hidden'>
-              {table.getHeaderGroups().map((headerGroup) => {
-                return (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header, index) => {
-                      return (
-                        <TableHead
-                          className={`
-                      bg-secondary  ${index === 0 ? 'rounded-tl-lg' : ''} ${
-                            index === headerGroup.headers.length - 1
-                              ? 'rounded-tr-lg'
-                              : ''
-                          }
-                      `}
-                          key={header.id}
-                        >
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                        </TableHead>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows.length > 0 ? (
-                table.getRowModel().rows.map((row) => {
+          <div className=''>
+            <Table className='w-full'>
+              <TableHeader className='rounded-tl-lg overflow-hidden'>
+                {table.getHeaderGroups().map((headerGroup) => {
                   return (
-                    <TableRow
-                      onClick={() => {
-                        router.push(
-                          `/tickets/form?ticketId=${row.original.id}`
+                    <TableRow key={headerGroup.id}>
+                      {headerGroup.headers.map((header, index) => {
+                        return (
+                          <TableHead
+                            className={`
+                        bg-secondary  ${index === 0 ? 'rounded-tl-lg' : ''} ${
+                              index === headerGroup.headers.length - 1
+                                ? 'rounded-tr-lg'
+                                : ''
+                            }
+                        `}
+                            key={header.id}
+                          >
+                            {header.isPlaceholder
+                              ? null
+                              : flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext()
+                                )}
+                          </TableHead>
                         );
-                      }}
-                      key={row.id}
-                      data-state={row.getIsSelected() && 'selected'}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
-                      ))}
+                      })}
                     </TableRow>
                   );
-                })
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={columns.length} className=' text-center'>
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+                })}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows.length > 0 ? (
+                  table.getRowModel().rows.map((row) => {
+                    return (
+                      <TableRow
+                        onClick={() => {
+                          router.push(
+                            `/tickets/form?ticketId=${row.original.id}`
+                          );
+                        }}
+                        key={row.id}
+                        data-state={row.getIsSelected() && 'selected'}
+                      >
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell key={cell.id}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    );
+                  })
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className=' text-center'
+                    >
+                      No results.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+            <div className='flex  px-4 py-2 items-center justify-between gap-4'>
+              <div className='flex gap-3'>
+                <Button
+                  disabled={!table.getCanPreviousPage()}
+                  onClick={() => table.previousPage()}
+                  variant={'outline'}
+                  size={'icon'}
+                >
+                  <ArrowBigLeft />
+                </Button>
+                <Button
+                  disabled={!table.getCanNextPage()}
+                  onClick={() => table.nextPage()}
+                  variant={'outline'}
+                  size={'icon'}
+                >
+                  <ArrowBigRight />
+                </Button>
+              </div>
+              <div>
+                <p className='whitespace-nowrap font-bold flex gap-2'>
+                  <span>
+                    {`Page ${
+                      table.getState().pagination.pageIndex + 1
+                    } of  ${table.getPageCount()} `}
+                  </span>
+
+                  <span>
+                    {`( ${table.getFilteredRowModel().rows.length} ${
+                      table.getFilteredRowModel().rows.length !== 1
+                        ? 'total results'
+                        : 'total result'
+                    })`}
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>
