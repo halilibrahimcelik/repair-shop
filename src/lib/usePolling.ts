@@ -5,10 +5,7 @@ export const usePolling = (searchParams: string | null, ms: number = 60000) => {
   const router = useRouter();
   useEffect(() => {
     const intervalId = setInterval(() => {
-      console.log('interval data');
-
       if (!searchParams) {
-        console.log('fetch data');
         router.refresh();
       }
     }, ms);

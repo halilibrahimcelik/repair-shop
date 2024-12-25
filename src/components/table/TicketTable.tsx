@@ -21,7 +21,7 @@ import {
 import { useRouter as useNextRouter } from 'nextjs-toploader/app';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Button } from '../ui/button';
 import {
   ArrowUpDown,
@@ -52,7 +52,10 @@ const TicketTable: React.FC<Props> = ({
   const router = useRouter();
   const params = useSearchParams();
   const searchedTextParam = params.get('searchText');
-  const pageParam = params.get('page');
+  const pageParam = useMemo(() => {
+    const page = params.get('page');
+    return page;
+  }, [params]);
 
   useEffect(() => {
     if (pageParam) {
@@ -62,7 +65,7 @@ const TicketTable: React.FC<Props> = ({
       }
     }
   }, [pageParam]);
-  usePolling(searchedTextParam, 6000);
+  usePolling(searchedTextParam, 10000);
   const columns: ColumnDef<RowType>[] = [
     {
       accessorKey: 'ticketDate',
@@ -165,7 +168,7 @@ const TicketTable: React.FC<Props> = ({
     const newParams = new URLSearchParams(params);
     newParams.delete('searchText');
     newParams.set('page', newPageIndex.toString());
-    router.push(`?${newParams.toString()}`);
+    router.replace(`?${newParams.toString()}`, { scroll: false });
   };
   const table = useReactTable({
     data: isOpenTickets ? openTicketsData! : data!,
@@ -178,12 +181,7 @@ const TicketTable: React.FC<Props> = ({
     getPaginationRowModel: getPaginationRowModel(),
 
     enableSorting: true,
-    initialState: {
-      pagination: {
-        pageSize: 10,
-        pageIndex: 0,
-      },
-    },
+
     state: {
       sorting,
       pagination: {
@@ -292,8 +290,8 @@ const TicketTable: React.FC<Props> = ({
                   disabled={!table.getCanPreviousPage()}
                   onClick={() => {
                     table.previousPage();
-
-                    handlePageChange(table.getState().pagination.pageIndex - 1);
+                    const newIndex = table.getState().pagination.pageIndex - 1;
+                    handlePageChange(newIndex);
                   }}
                   variant={'outline'}
                   size={'icon'}
@@ -304,8 +302,8 @@ const TicketTable: React.FC<Props> = ({
                   disabled={!table.getCanNextPage()}
                   onClick={() => {
                     table.nextPage();
-
-                    handlePageChange(table.getState().pagination.pageIndex + 1);
+                    const newIndex = table.getState().pagination.pageIndex + 1;
+                    handlePageChange(newIndex);
                   }}
                   variant={'outline'}
                   size={'icon'}
