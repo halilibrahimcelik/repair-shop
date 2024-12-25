@@ -18,8 +18,10 @@ import {
   TableHeader,
   TableRow,
 } from '../ui/table';
-import { useRouter } from 'nextjs-toploader/app';
-import { useState } from 'react';
+import { useRouter as useNextRouter } from 'nextjs-toploader/app';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { Button } from '../ui/button';
 import {
   ArrowUpDown,
@@ -32,7 +34,7 @@ import { toast } from 'sonner';
 import { TicketSearchResultsType } from '@/lib/queries';
 import { useGetAllOpenTickets, useGetSearchedTickets } from '@/lib/get-tickets';
 import TableSkeleton from './TableSkeleton';
-
+import { usePolling } from '@/lib/usePolling';
 type Props = {
   searchText?: string;
   isOpenTickets?: boolean;
@@ -45,9 +47,22 @@ const TicketTable: React.FC<Props> = ({
   const { data, isFetching } = useGetSearchedTickets(searchText!);
   const { data: openTicketsData } = useGetAllOpenTickets();
   const [sorting, setSorting] = useState<SortingState>([]);
-
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
+  const routerPage = useNextRouter();
   const router = useRouter();
+  const params = useSearchParams();
+  const searchedTextParam = params.get('searchText');
+  const pageParam = params.get('page');
 
+  useEffect(() => {
+    if (pageParam) {
+      const pageIndex = parseInt(pageParam);
+      if (!isNaN(pageIndex)) {
+        setPagination((prev) => ({ ...prev, pageIndex }));
+      }
+    }
+  }, [pageParam]);
+  usePolling(searchedTextParam, 6000);
   const columns: ColumnDef<RowType>[] = [
     {
       accessorKey: 'ticketDate',
@@ -145,14 +160,23 @@ const TicketTable: React.FC<Props> = ({
     },
   ];
 
+  const handlePageChange = (newPageIndex: number) => {
+    // Update the URL with the new pageIndex
+    const newParams = new URLSearchParams(params);
+    newParams.delete('searchText');
+    newParams.set('page', newPageIndex.toString());
+    router.push(`?${newParams.toString()}`);
+  };
   const table = useReactTable({
     data: isOpenTickets ? openTicketsData! : data!,
     columns,
+
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+
     enableSorting: true,
     initialState: {
       pagination: {
@@ -162,6 +186,10 @@ const TicketTable: React.FC<Props> = ({
     },
     state: {
       sorting,
+      pagination: {
+        pageSize: 10,
+        pageIndex: pagination.pageIndex,
+      },
     },
   });
   const headersArray = [
@@ -228,7 +256,7 @@ const TicketTable: React.FC<Props> = ({
                     return (
                       <TableRow
                         onClick={() => {
-                          router.push(
+                          routerPage.push(
                             `/tickets/form?ticketId=${row.original.id}`
                           );
                         }}
@@ -262,7 +290,11 @@ const TicketTable: React.FC<Props> = ({
               <div className='flex gap-3'>
                 <Button
                   disabled={!table.getCanPreviousPage()}
-                  onClick={() => table.previousPage()}
+                  onClick={() => {
+                    table.previousPage();
+
+                    handlePageChange(table.getState().pagination.pageIndex - 1);
+                  }}
                   variant={'outline'}
                   size={'icon'}
                 >
@@ -270,7 +302,11 @@ const TicketTable: React.FC<Props> = ({
                 </Button>
                 <Button
                   disabled={!table.getCanNextPage()}
-                  onClick={() => table.nextPage()}
+                  onClick={() => {
+                    table.nextPage();
+
+                    handlePageChange(table.getState().pagination.pageIndex + 1);
+                  }}
                   variant={'outline'}
                   size={'icon'}
                 >

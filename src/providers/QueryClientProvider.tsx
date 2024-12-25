@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 6,
+      staleTime: 6000 * 10,
       refetchOnWindowFocus: true,
     },
   },
