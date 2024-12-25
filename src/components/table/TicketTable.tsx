@@ -35,6 +35,7 @@ import { TicketSearchResultsType } from '@/lib/queries';
 import { useGetAllOpenTickets, useGetSearchedTickets } from '@/lib/get-tickets';
 import TableSkeleton from './TableSkeleton';
 import { usePolling } from '@/lib/usePolling';
+import FilterRows from './FilterRows';
 type Props = {
   searchText?: string;
   isOpenTickets?: boolean;
@@ -56,7 +57,6 @@ const TicketTable: React.FC<Props> = ({
     const page = params.get('page');
     return page;
   }, [params]);
-  console.log('data', openTicketsData);
   useEffect(() => {
     if (pageParam) {
       const pageIndex = parseInt(pageParam);
@@ -69,6 +69,9 @@ const TicketTable: React.FC<Props> = ({
   const columns: ColumnDef<RowType>[] = [
     {
       accessorKey: 'ticketDate',
+      meta: {
+        filterVariant: 'date',
+      },
       header: ({ column }) => {
         return (
           <Button
@@ -95,6 +98,9 @@ const TicketTable: React.FC<Props> = ({
     },
     {
       accessorKey: 'updatedDate',
+      meta: {
+        filterVariant: 'date',
+      },
       header: ({ column }) => {
         return (
           <Button
@@ -121,8 +127,11 @@ const TicketTable: React.FC<Props> = ({
     },
     {
       accessorKey: 'title',
+      meta: {
+        filterVariant: 'text',
+      },
       header: ({}) => {
-        return <div>Title</div>;
+        return <div className='h-9 pt-2 text-sm'>Title </div>;
       },
       cell: ({ row }) => (
         <div className='lowercase'>{row.getValue('title')}</div>
@@ -130,21 +139,36 @@ const TicketTable: React.FC<Props> = ({
     },
     {
       accessorKey: 'firstName',
-      header: 'First Name',
+      header: ({}) => {
+        return <div className='h-9 pt-2 text-sm'>First Name </div>;
+      },
+      meta: {
+        filterVariant: 'text',
+      },
       cell: ({ row }) => (
         <div className='lowercase'>{row.getValue('firstName')}</div>
       ),
     },
     {
       accessorKey: 'lastName',
-      header: 'Last Name',
+      header: ({}) => {
+        return <div className='h-9 pt-2 text-sm'>Last Name </div>;
+      },
+      meta: {
+        filterVariant: 'text',
+      },
       cell: ({ row }) => (
         <div className='lowercase'>{row.getValue('lastName')}</div>
       ),
     },
     {
       accessorKey: 'email',
-      header: 'Email',
+      header: ({}) => {
+        return <div className='h-9 pt-2 text-sm'>Email </div>;
+      },
+      meta: {
+        filterVariant: 'text',
+      },
       cell: ({ row }) => (
         <div className='lowercase'>
           <Button
@@ -172,6 +196,9 @@ const TicketTable: React.FC<Props> = ({
     },
     {
       accessorKey: 'completed',
+      meta: {
+        filterVariant: 'multiSelect',
+      },
       header: 'Completed',
       cell: ({ row }) => {
         const completed = row.getValue('completed') as boolean;
@@ -267,6 +294,9 @@ const TicketTable: React.FC<Props> = ({
                                   header.column.columnDef.header,
                                   header.getContext()
                                 )}
+                            {header.column.getCanFilter() ? (
+                              <FilterRows column={header.column} />
+                            ) : null}
                           </TableHead>
                         );
                       })}
@@ -311,7 +341,7 @@ const TicketTable: React.FC<Props> = ({
               </TableBody>
             </Table>
             <div className='flex  px-4 py-2 items-center justify-between gap-4'>
-              <div className='flex gap-3'>
+              <div className='flex  gap-3'>
                 <Button
                   disabled={!table.getCanPreviousPage()}
                   onClick={() => {
@@ -337,22 +367,31 @@ const TicketTable: React.FC<Props> = ({
                   <ArrowBigRight />
                 </Button>
               </div>
-              <div>
-                <p className='whitespace-nowrap font-bold flex gap-2'>
-                  <span>
-                    {`Page ${
-                      table.getState().pagination.pageIndex + 1
-                    } of  ${table.getPageCount()} `}
-                  </span>
-
-                  <span>
-                    {`( ${table.getFilteredRowModel().rows.length} ${
-                      table.getFilteredRowModel().rows.length !== 1
-                        ? 'total results'
-                        : 'total result'
-                    })`}
-                  </span>
-                </p>
+              <div className='flex gap-3 items-center'>
+                <Button
+                  variant={'ghost'}
+                  onClick={() => {
+                    table.reset();
+                  }}
+                >
+                  Reset Filters
+                </Button>
+                <div>
+                  <p className='whitespace-nowrap font-bold flex gap-2'>
+                    <span>
+                      {`Page ${
+                        table.getState().pagination.pageIndex + 1
+                      } of  ${table.getPageCount()} `}
+                    </span>
+                    <span>
+                      {`( ${table.getFilteredRowModel().rows.length} ${
+                        table.getFilteredRowModel().rows.length !== 1
+                          ? 'total results'
+                          : 'total result'
+                      })`}
+                    </span>
+                  </p>
+                </div>
               </div>
             </div>
           </div>

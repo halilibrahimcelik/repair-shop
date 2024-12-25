@@ -134,7 +134,7 @@ export const getOpenTickets = async () => {
       })
       .from(ticketsTable)
       .leftJoin(customersTable, eq(ticketsTable.customersId, customersTable.id))
-      .where(eq(ticketsTable.completed, false))
+      // .where(eq(ticketsTable.completed, false))
       .orderBy(asc(ticketsTable.createdAt));
     return results;
   } catch (error) {
