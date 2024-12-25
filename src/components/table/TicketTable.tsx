@@ -56,7 +56,7 @@ const TicketTable: React.FC<Props> = ({
     const page = params.get('page');
     return page;
   }, [params]);
-
+  console.log('data', openTicketsData);
   useEffect(() => {
     if (pageParam) {
       const pageIndex = parseInt(pageParam);
@@ -84,6 +84,32 @@ const TicketTable: React.FC<Props> = ({
       },
       cell: ({ row }) => {
         const date = row.getValue('ticketDate') as Date;
+        const dateStr = date.toLocaleDateString('en-Us', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        });
+
+        return <div className='lowercase'>{dateStr}</div>;
+      },
+    },
+    {
+      accessorKey: 'updatedDate',
+      header: ({ column }) => {
+        return (
+          <Button
+            variant='ghost'
+            onClick={() => {
+              column.toggleSorting(column.getIsSorted() === 'asc');
+            }}
+          >
+            Updated Date
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => {
+        const date = row.getValue('updatedDate') as Date;
         const dateStr = date.toLocaleDateString('en-Us', {
           year: 'numeric',
           month: '2-digit',
