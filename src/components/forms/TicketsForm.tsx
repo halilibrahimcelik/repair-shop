@@ -57,7 +57,7 @@ const TicketsForm: React.FC<Props> = ({
     id: ticket?.id || 'New',
     title: ticket?.title || '',
     description: ticket?.description || '',
-    tech: ticket?.tech || 'new-ticket@example.com',
+    tech: ticket?.tech ?? 'new-ticket@example.com',
     completed: ticket?.completed || false,
   };
 

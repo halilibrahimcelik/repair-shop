@@ -85,7 +85,6 @@ const TicketFormPage: React.FC<Props> = async ({ searchParams }) => {
       if (isManager) {
         kindeInit();
         const { users } = await Users.getUsers();
-        console.log(users);
         const techs = users
           ? users.map((user) => ({
               id: user.id!,

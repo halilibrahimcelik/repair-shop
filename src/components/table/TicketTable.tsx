@@ -65,13 +65,14 @@ const TicketTable: React.FC<Props> = ({
       }
     }
   }, [pageParam]);
-  usePolling(searchedTextParam, 10000);
+  usePolling(searchedTextParam, 300000);
   const columns: ColumnDef<RowType>[] = [
     {
       accessorKey: 'ticketDate',
       meta: {
         filterVariant: 'date',
       },
+
       header: ({ column }) => {
         return (
           <Button
@@ -140,7 +141,9 @@ const TicketTable: React.FC<Props> = ({
     {
       accessorKey: 'firstName',
       header: ({}) => {
-        return <div className='h-9 pt-2 text-sm'>First Name </div>;
+        return (
+          <div className='h-9 pt-2 text-sm whitespace-nowrap'>First Name </div>
+        );
       },
       meta: {
         filterVariant: 'text',
@@ -152,7 +155,9 @@ const TicketTable: React.FC<Props> = ({
     {
       accessorKey: 'lastName',
       header: ({}) => {
-        return <div className='h-9 pt-2 text-sm'>Last Name </div>;
+        return (
+          <div className='h-9 pt-2 text-sm whitespace-nowrap'>Last Name </div>
+        );
       },
       meta: {
         filterVariant: 'text',
@@ -266,7 +271,7 @@ const TicketTable: React.FC<Props> = ({
   return (
     <div className='my-10'>
       <h1 className='subheading mb-4'>Ticket Table</h1>
-      <div className='rounded-xl border'>
+      <div className='rounded-xl border overflow-hidden'>
         {isFetching ? (
           <TableSkeleton headersArray={headersArray} rowArray={rowArray} />
         ) : (

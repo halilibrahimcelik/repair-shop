@@ -68,13 +68,15 @@ const CustomerTable: React.FC<Props> = ({ searchText, isAllCustomers }) => {
         );
       },
       cell: ({ row }) => (
-        <div className='lowercase'>{row.getValue('firstName')}</div>
+        <div className='lowercase whi'>{row.getValue('firstName')}</div>
       ),
     },
     {
       accessorKey: 'lastName',
       header: ({}) => {
-        return <div className='h-9 pt-2 text-sm'>Last Name</div>;
+        return (
+          <div className='h-9 pt-2 text-sm whitespace-nowrap'>Last Name</div>
+        );
       },
       cell: ({ row }) => (
         <div className='lowercase'>{row.getValue('lastName')}</div>
@@ -200,7 +202,7 @@ const CustomerTable: React.FC<Props> = ({ searchText, isAllCustomers }) => {
           Reset Filter
         </Button>
       </div>
-      <div className='rounded-xl border'>
+      <div className='rounded-xl border overflow-hidden'>
         {isFetching ? (
           <TableSkeleton headersArray={headerArray} rowArray={rowArray} />
         ) : (
