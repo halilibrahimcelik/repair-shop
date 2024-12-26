@@ -26,11 +26,17 @@ import { useAction } from 'next-safe-action/hooks';
 import { saveCustomerAction } from '@/app/actions/saveCustomerAction';
 import { CITIES } from '@/constants/cities';
 import { LoaderCircle } from 'lucide-react';
+import { useEffect } from 'react';
 type Props = {
   customer?: SelectCusctomerSchemaType;
   isGranted: boolean;
+  isNewCustomer: boolean;
 };
-const CustomerForm: React.FC<Props> = ({ customer, isGranted }) => {
+const CustomerForm: React.FC<Props> = ({
+  customer,
+  isGranted,
+  isNewCustomer,
+}) => {
   const defaultValues: InsertCustomerSchemaType = {
     id: customer?.id || 0,
     firstName: customer?.firstName || '',
@@ -48,8 +54,16 @@ const CustomerForm: React.FC<Props> = ({ customer, isGranted }) => {
   const form = useForm<InsertCustomerSchemaType>({
     mode: 'onBlur',
     defaultValues,
+
     resolver: zodResolver(insertCustomerSchema),
   });
+  useEffect(() => {
+    if (isNewCustomer) {
+      form.reset(defaultValues);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form, isNewCustomer]);
+
   const {
     execute: executeSave,
     // result: saveResult,
