@@ -340,7 +340,7 @@ const TicketTable: React.FC<Props> = ({
                 )}
               </TableBody>
             </Table>
-            <div className='flex  px-4 py-2 items-center justify-between gap-4'>
+            <div className='flex flex-col xs:flex-row  px-4 py-2 items-center xs:items-start sm:items-center justify-between gap-4'>
               <div className='flex  gap-3'>
                 <Button
                   disabled={!table.getCanPreviousPage()}
@@ -367,7 +367,7 @@ const TicketTable: React.FC<Props> = ({
                   <ArrowBigRight />
                 </Button>
               </div>
-              <div className='flex gap-3 items-center'>
+              <div className='flex gap-3 flex-col sm:flex-row   items-center  xs:items-end sm:items-center'>
                 <Button
                   variant={'ghost'}
                   onClick={() => {

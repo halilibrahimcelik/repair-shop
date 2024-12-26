@@ -46,9 +46,6 @@ const FilterRows = <T,>({ column }: Props<T>) => {
     );
   }
   if (filterVariant === 'multiSelect') {
-    console.log(columnFilterValue, 'multiSelect');
-    //I want to send true  as boolean if open is selected and false if close is selected to my table
-
     return (
       <Select
         onValueChange={(value) => {
