@@ -41,7 +41,7 @@ const CustomerFormPage: React.FC<Props> = async ({ searchParams }) => {
   const isManager = managerPermission?.isGranted;
   try {
     const { customerId } = await searchParams;
-
+    const isNewCustomer = customerId ? false : true;
     if (customerId) {
       //editForm
 
@@ -58,7 +58,11 @@ const CustomerFormPage: React.FC<Props> = async ({ searchParams }) => {
       return (
         <div>
           <h1>Edit customer form for customer id# {customerId} </h1>
-          <CustomerForm customer={customer} isGranted={isManager!} />
+          <CustomerForm
+            isNewCustomer={isNewCustomer}
+            customer={customer}
+            isGranted={isManager!}
+          />
         </div>
       );
     } else {
@@ -67,7 +71,7 @@ const CustomerFormPage: React.FC<Props> = async ({ searchParams }) => {
       return (
         <div>
           <h1>New customer form</h1>
-          <CustomerForm isGranted={isManager!} />
+          <CustomerForm isNewCustomer={isNewCustomer} isGranted={isManager!} />
         </div>
       );
     }

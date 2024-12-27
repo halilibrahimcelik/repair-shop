@@ -1,7 +1,11 @@
-import React from 'react';
+import { NextPage } from 'next';
 
-const HomePage = () => {
-  return <div>HomePage</div>;
+const HomePage: NextPage = () => {
+  return (
+    <div>
+      <h1>Home Page</h1>
+    </div>
+  );
 };
 
 export default HomePage;

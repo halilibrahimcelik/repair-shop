@@ -21,7 +21,7 @@ const Header = ({ user }: Props) => {
   return (
     <header
       className='animate-up bg-background h-16 py-4 px-2 border-b 
-  sticky top-0 z-1000 
+  sticky top-0 z-[50]
   '
     >
       <div className='flex h-8 items-center justify-between w-full'>

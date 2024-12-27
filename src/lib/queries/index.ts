@@ -90,6 +90,7 @@ export const getTicketSearchResults = async (searchText: string) => {
         phone: customersTable.phone,
         tech: ticketsTable.tech,
         completed: ticketsTable.completed,
+        updatedDate: ticketsTable.updatedAt,
       })
       .from(ticketsTable)
       .leftJoin(customersTable, eq(ticketsTable.customersId, customersTable.id))
@@ -129,10 +130,11 @@ export const getOpenTickets = async () => {
         phone: customersTable.phone,
         tech: ticketsTable.tech,
         completed: ticketsTable.completed,
+        updatedDate: ticketsTable.updatedAt,
       })
       .from(ticketsTable)
       .leftJoin(customersTable, eq(ticketsTable.customersId, customersTable.id))
-      .where(eq(ticketsTable.completed, false))
+      // .where(eq(ticketsTable.completed, false))
       .orderBy(asc(ticketsTable.createdAt));
     return results;
   } catch (error) {

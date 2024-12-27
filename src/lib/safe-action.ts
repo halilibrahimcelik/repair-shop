@@ -3,7 +3,7 @@ import { createSafeActionClient } from 'next-safe-action';
 import { z } from 'zod';
 
 import * as Sentry from '@sentry/nextjs';
-
+import type { NeonDbError } from '@neondatabase/serverless';
 export const actionClient = createSafeActionClient({
   defineMetadataSchema() {
     return z.object({
@@ -12,6 +12,12 @@ export const actionClient = createSafeActionClient({
   },
   handleServerError(e, utils) {
     const { clientInput, metadata } = utils;
+    if (e.constructor.name === 'NeonDbError') {
+      const { code, detail } = e as NeonDbError;
+      if (code === '23505') {
+        return `Unique entry requiered ${detail}`;
+      }
+    }
     Sentry.captureException(e, (scope) => {
       scope.clear();
       scope.setContext('serverError', {
@@ -26,6 +32,7 @@ export const actionClient = createSafeActionClient({
       return scope;
     });
     if (e.constructor.name === 'NeonDbError') {
+      console.error(e);
       return 'Database Error: Your data did not save. Suppor will be verified.';
     }
     return e.message;

@@ -42,6 +42,7 @@ type Props = {
     name: string;
   }[];
   isEditable?: boolean;
+  isManager?: boolean;
 };
 
 const TicketsForm: React.FC<Props> = ({
@@ -49,15 +50,14 @@ const TicketsForm: React.FC<Props> = ({
   customer,
   techs,
   isEditable = true,
+  isManager = false,
 }) => {
-  const isManager = Array.isArray(techs);
-
   const defaultValues: InsertTicketSchemaType = {
     customersId: customer.id ?? ticket?.customersId,
     id: ticket?.id || 'New',
     title: ticket?.title || '',
     description: ticket?.description || '',
-    tech: ticket?.tech || 'new-ticket@example.com',
+    tech: ticket?.tech ?? 'new-ticket@example.com',
     completed: ticket?.completed || false,
   };
 
@@ -142,7 +142,7 @@ const TicketsForm: React.FC<Props> = ({
                 fieldTitle='Title'
                 disabled={!isEditable}
               />
-              {isManager ? (
+              {isManager && techs ? (
                 <SelectWithLabel<InsertTicketSchemaType>
                   nameInSchema='tech'
                   fieldTitle='Tech ID'

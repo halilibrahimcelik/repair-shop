@@ -85,7 +85,6 @@ const TicketFormPage: React.FC<Props> = async ({ searchParams }) => {
       if (isManager) {
         kindeInit();
         const { users } = await Users.getUsers();
-        console.log(users);
         const techs = users
           ? users.map((user) => ({
               id: user.id!,
@@ -94,7 +93,11 @@ const TicketFormPage: React.FC<Props> = async ({ searchParams }) => {
           : [];
         return (
           <div className='my-4'>
-            <TicketsForm customer={customer} techs={techs} />
+            <TicketsForm
+              customer={customer}
+              techs={techs}
+              isManager={isManager}
+            />
           </div>
         );
       } else {
@@ -127,10 +130,14 @@ const TicketFormPage: React.FC<Props> = async ({ searchParams }) => {
         const techs = users
           ? users.map((user) => ({ id: user.id!, name: user.email! }))
           : [];
-        console.log(techs);
         return (
           <div>
-            <TicketsForm customer={customerX!} ticket={ticket} techs={techs} />
+            <TicketsForm
+              customer={customerX!}
+              ticket={ticket}
+              techs={techs}
+              isManager={isManager}
+            />
             <BackButton title='Back' size='default' variants='default' />
           </div>
         );
