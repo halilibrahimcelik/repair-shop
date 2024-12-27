@@ -42,7 +42,6 @@ const CustomerFormPage: React.FC<Props> = async ({ searchParams }) => {
   try {
     const { customerId } = await searchParams;
     const isNewCustomer = customerId ? false : true;
-    console.log(customerId, 'customerId');
     if (customerId) {
       //editForm
 

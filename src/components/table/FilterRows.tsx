@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 type Props<T> = {
   column: Column<T, unknown>;
@@ -14,6 +15,14 @@ type Props<T> = {
 const FilterRows = <T,>({ column }: Props<T>) => {
   const columnFilterValue = column.getFilterValue();
   const { filterVariant } = column.columnDef.meta ?? {};
+  const params = useSearchParams();
+  const router = useRouter();
+  const updatePageParam = () => {
+    const newParams = new URLSearchParams(params);
+    newParams.delete('searchText');
+    newParams.set('page', '0');
+    router.replace(`?${newParams.toString()}`, { scroll: false });
+  };
   const multipleOpenObj = [
     {
       id: '0',
@@ -38,7 +47,10 @@ const FilterRows = <T,>({ column }: Props<T>) => {
     return (
       <DebouncedInput
         className='w-full border dark:bg-white  rounded  mb-2'
-        onChange={(value) => column.setFilterValue(value)}
+        onChange={(value) => {
+          column.setFilterValue(value);
+          updatePageParam();
+        }}
         placeholder={`Search...`}
         type='text'
         value={(columnFilterValue ?? '') as string}
@@ -52,6 +64,7 @@ const FilterRows = <T,>({ column }: Props<T>) => {
           const booleanValue =
             value === 'Yes' ? true : value === 'No' ? false : null;
           column.setFilterValue(booleanValue);
+          updatePageParam();
         }}
         defaultValue={columnFilterValue as string}
       >

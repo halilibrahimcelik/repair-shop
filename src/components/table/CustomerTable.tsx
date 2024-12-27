@@ -25,7 +25,7 @@ import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '../ui/button';
-import { ArrowUpDown } from 'lucide-react';
+import { ArrowUpDown, FileDiff } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   useGetAllCustomers,
@@ -38,6 +38,7 @@ type Props = {
   searchText?: string;
   isAllCustomers?: boolean;
 };
+
 const CustomerTable: React.FC<Props> = ({ searchText, isAllCustomers }) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilter] = useState<ColumnFiltersState>([]);
@@ -54,6 +55,7 @@ const CustomerTable: React.FC<Props> = ({ searchText, isAllCustomers }) => {
   const columns: ColumnDef<SelectCusctomerSchemaType>[] = [
     {
       accessorKey: 'firstName',
+
       header: ({ column }) => {
         return (
           <Button
@@ -62,24 +64,44 @@ const CustomerTable: React.FC<Props> = ({ searchText, isAllCustomers }) => {
               column.toggleSorting(column.getIsSorted() === 'asc');
             }}
           >
-            First Name
+            Full Name
             <ArrowUpDown size={20} />
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className='lowercase whi'>{row.getValue('firstName')}</div>
-      ),
+      cell: ({ row }) => {
+        const firstName = row.getValue('firstName') as string;
+        const lastName = row.getValue('lastName') as string;
+        return (
+          <div className=' '>
+            {firstName} {lastName}
+          </div>
+        );
+      },
     },
     {
       accessorKey: 'lastName',
       header: ({}) => {
         return (
-          <div className='h-9 pt-2 text-sm whitespace-nowrap'>Last Name</div>
+          <div className='h-9 pt-2 text-sm whitespace-nowrap'>New Ticket</div>
         );
       },
       cell: ({ row }) => (
-        <div className='lowercase'>{row.getValue('lastName')}</div>
+        <div className='lowercase grid place-content-center'>
+          {' '}
+          <Button
+            title='Assign New Ticket'
+            onClick={(e) => {
+              e.stopPropagation();
+              router.push(`/tickets/form?customerId=${row.original.id}`);
+            }}
+            className='rounded-full'
+            variant={'ghost'}
+            size={'icon'}
+          >
+            <FileDiff size={20} />
+          </Button>{' '}
+        </div>
       ),
     },
     {
