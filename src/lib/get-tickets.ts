@@ -16,6 +16,13 @@ export function useGetSearchedTickets(param: string) {
 export function useGetAllOpenTickets() {
   return useQuery({
     queryKey: ['open-tickets'],
-    queryFn: async () => await getOpenTickets(),
+    queryFn: async () => {
+      const tickets = await getOpenTickets();
+      if (tickets) {
+        return tickets;
+      } else {
+        return [];
+      }
+    },
   });
 }
