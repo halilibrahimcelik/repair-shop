@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["jest", "node", "@testing-library/jest-dom"],
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -27,8 +28,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "__test__/home.test.jsx",
-    "src/lib/queries/__test__/queries.test.ts"
+    "jest.setup.ts"
   ],
   "exclude": ["node_modules"]
 }

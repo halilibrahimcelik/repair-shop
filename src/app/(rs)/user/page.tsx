@@ -1,8 +1,14 @@
 import { NextPage } from 'next';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import UserForm from '@/components/forms/UserForm';
+import { redirect } from 'next/navigation';
 
 const UserPage: NextPage = async () => {
+  /*
+  This page will be updated in the future development
+  It will be used to display the user profile and allow them to edit their profile
+  */
+  redirect('/tickets');
   const { getUser, getAccessTokenRaw } = getKindeServerSession();
   const [user, accessToken] = await Promise.all([
     getUser(),
