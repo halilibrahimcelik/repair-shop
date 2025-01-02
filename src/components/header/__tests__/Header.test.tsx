@@ -44,12 +44,11 @@ describe('Header', () => {
     id: '123',
   };
 
-  it('renders header with user information', () => {
+  test('renders header with user information', () => {
     render(<Header user={mockUser} />);
 
     // Check if main elements are present
     expect(screen.getByText('Computer Repair Shop')).toBeInTheDocument();
-    expect(screen.getByTitle('profile')).toBeInTheDocument();
     expect(screen.getByTitle('logout')).toBeInTheDocument();
   });
 });

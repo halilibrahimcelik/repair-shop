@@ -28,7 +28,7 @@ const Header = ({ user }: Props) => {
         <div className='flex items-center gap-2'>
           <NavButton label='Home' Icon={HomeIcon} href='/' />
           <Link
-            href={ROUTES.HOME}
+            href={'/'}
             className='flex justify-center items-center gap-2 ml-0'
             title='Home'
           >

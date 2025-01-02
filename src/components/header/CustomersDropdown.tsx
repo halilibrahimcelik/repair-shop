@@ -20,6 +20,7 @@ function CustomersDropdown() {
     <DropdownMenu onOpenChange={setIsOpen} open={isOpen}>
       <DropdownMenuTrigger asChild>
         <Button
+          data-testid='customers-menu-button'
           title='Customers Menu'
           className='rounded-full p-2'
           variant='ghost'
@@ -28,7 +29,7 @@ function CustomersDropdown() {
           <UsersRound size={28} />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='w-auto'>
+      <DropdownMenuContent data-testid='customers-dropdown' className='w-auto'>
         <DropdownMenuItem asChild onClick={() => setIsOpen(false)}>
           <Link href={ROUTES.CUSTOMERS + '?allCustomers=true'}>Customers</Link>
         </DropdownMenuItem>
