@@ -52,6 +52,7 @@ const TicketsForm: React.FC<Props> = ({
   isEditable = true,
   isManager = false,
 }) => {
+  console.log(isManager);
   const defaultValues: InsertTicketSchemaType = {
     customersId: customer.id ?? ticket?.customersId,
     id: ticket?.id || 'New',
