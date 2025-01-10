@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-import { Button } from '@/components/ui/button';
+import RequestPermissionForm from '@/components/forms/RequestPermissionForm';
 
 const UserPage: NextPage = async () => {
   /*
@@ -22,7 +22,7 @@ const UserPage: NextPage = async () => {
       {isManager ? (
         <p>You have full authorization</p>
       ) : (
-        <Button className='w-fit'>Ask for permission</Button>
+        <RequestPermissionForm />
       )}
 
       {/* <UserForm accessToken={accessToken} user={user} /> */}
