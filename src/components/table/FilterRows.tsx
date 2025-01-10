@@ -49,7 +49,9 @@ const FilterRows = <T,>({ column }: Props<T>) => {
         className='w-full border dark:bg-white  rounded  mb-2'
         onChange={(value) => {
           column.setFilterValue(value);
-          updatePageParam();
+          if (value) {
+            updatePageParam();
+          }
         }}
         placeholder={`Search...`}
         type='text'

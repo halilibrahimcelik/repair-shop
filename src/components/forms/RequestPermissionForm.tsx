@@ -1,8 +1,14 @@
 'use client';
 
+import { KindeUser } from '@kinde-oss/kinde-auth-nextjs/types';
 import { Button } from '../ui/button';
+import Form from 'next/form';
 
-const RequestPermissionForm = () => {
+type Props = {
+  user: KindeUser<Record<string, unknown>>;
+};
+const RequestPermissionForm = ({ user }: Props) => {
+  console.log(user);
   const requestPermission = async () => {
     try {
       const response = await fetch('/api/send-email', {
@@ -23,10 +29,6 @@ const RequestPermissionForm = () => {
       console.log(error);
     }
   };
-  return (
-    <Button onClick={requestPermission} className='w-fit'>
-      Ask for permission
-    </Button>
-  );
+  return <Form action={''}></Form>;
 };
 export default RequestPermissionForm;

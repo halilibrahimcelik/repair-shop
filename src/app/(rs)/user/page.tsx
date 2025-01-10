@@ -22,7 +22,7 @@ const UserPage: NextPage = async () => {
       {isManager ? (
         <p>You have full authorization</p>
       ) : (
-        <RequestPermissionForm />
+        <RequestPermissionForm user={user} />
       )}
 
       {/* <UserForm accessToken={accessToken} user={user} /> */}

@@ -39,10 +39,8 @@ const TicketsPage = async ({ searchParams }: Props) => {
       <HydrationBoundary state={dehydrate(queryClient)}>
         <div>
           <SearchForm action='/tickets' searchText={searchText} />
-          <h1>
-            Ticket Search Results for: {searchText}
-            <TicketTable searchText={searchText} />
-          </h1>
+          <h1>Ticket Search Results for: {searchText}</h1>
+          <TicketTable searchText={searchText} />
         </div>
       </HydrationBoundary>
     );

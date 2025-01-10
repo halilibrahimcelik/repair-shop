@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     const mailOptions: Options = {
       from: email,
       to: process.env.EMAIL_USER,
-      subject: 'Test Email',
+      subject: 'Request Access permission',
       text: 'This is a test email from your application',
     };
 

@@ -224,6 +224,7 @@ const TicketTable: React.FC<Props> = ({
   const handlePageChange = (newPageIndex: number) => {
     // Update the URL with the new pageIndex
     const newParams = new URLSearchParams(params);
+    console.log('init fn');
     newParams.delete('searchText');
     newParams.set('page', newPageIndex.toString());
     router.replace(`?${newParams.toString()}`, { scroll: false });
@@ -268,6 +269,7 @@ const TicketTable: React.FC<Props> = ({
     'row9',
     'row10',
   ];
+
   return (
     <div className='my-10'>
       <h1 className='subheading mb-4'>Ticket Table</h1>
