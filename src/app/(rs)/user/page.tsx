@@ -14,7 +14,7 @@ const UserPage: NextPage = async () => {
 
   return (
     <div className='my-4 flex flex-col gap-2'>
-      <h1>Welcome back {user?.given_name}</h1>
+      <h1 className='subheading'>Welcome back {user?.given_name}</h1>
       <p>
         Here you can see ask permission for managing tickets, with your current
         permission, you are not allowed to edit or create a new ticket
