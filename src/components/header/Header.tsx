@@ -40,14 +40,16 @@ const Header = ({ user }: Props) => {
 
         <div className='flex items-center gap-1'>
           <Button title='profile' className='p-0 h-auto  rounded-full'>
-            <Avatar title='profile'>
-              <AvatarImage src={user?.picture || ''} />
-              <AvatarFallback>
-                {`${user?.given_name?.charAt(0)} ${user?.family_name?.charAt(
-                  0
-                )}`}{' '}
-              </AvatarFallback>
-            </Avatar>
+            <Link href={ROUTES.USER}>
+              <Avatar title='profile'>
+                <AvatarImage src={user?.picture || ''} />
+                <AvatarFallback>
+                  {`${user?.given_name?.charAt(0)} ${user?.family_name?.charAt(
+                    0
+                  )}`}{' '}
+                </AvatarFallback>
+              </Avatar>
+            </Link>
           </Button>
 
           <NavButton label='Tickets' Icon={File} href={ROUTES.TICKETS} />

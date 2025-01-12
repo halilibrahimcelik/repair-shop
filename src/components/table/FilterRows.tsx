@@ -46,7 +46,7 @@ const FilterRows = <T,>({ column }: Props<T>) => {
   if (filterVariant === 'text') {
     return (
       <DebouncedInput
-        className='w-full border dark:bg-white  rounded  mb-2'
+        className='w-full border dark:bg-white text-black  rounded  mb-2'
         onChange={(value) => {
           column.setFilterValue(value);
           if (value) {
@@ -71,7 +71,7 @@ const FilterRows = <T,>({ column }: Props<T>) => {
         defaultValue={columnFilterValue as string}
       >
         <>
-          <SelectTrigger className={`w-full bg-white mt-2 `}>
+          <SelectTrigger className={`w-full bg-white mt-2  text-black`}>
             <SelectValue placeholder='Select' />
           </SelectTrigger>
         </>

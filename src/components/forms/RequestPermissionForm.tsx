@@ -16,6 +16,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoaderCircle } from 'lucide-react';
 import { toast } from 'sonner';
+import { Textarea } from '../ui/textarea';
 type Props = {
   user: KindeUser<Record<string, unknown>>;
 };
@@ -39,7 +40,7 @@ const RequestPermissionForm = ({ user }: Props) => {
     mode: 'onSubmit',
     defaultValues: {
       email: user.email || '',
-      subject: '',
+      subject: 'Authorization request',
       description: '',
     },
   });
@@ -123,7 +124,7 @@ const RequestPermissionForm = ({ user }: Props) => {
             <FormItem className='max-w-md'>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Textarea {...field} />
               </FormControl>
               <FormMessage withIcon />
             </FormItem>

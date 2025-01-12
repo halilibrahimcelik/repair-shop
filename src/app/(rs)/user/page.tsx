@@ -2,6 +2,10 @@ import { NextPage } from 'next';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import RequestPermissionForm from '@/components/forms/RequestPermissionForm';
 
+export const metadata = {
+  title: 'User Page',
+  description: 'This page will be updated in the future development',
+};
 const UserPage: NextPage = async () => {
   /*
   This page will be updated in the future development
@@ -13,9 +17,9 @@ const UserPage: NextPage = async () => {
   const isManager = role?.isGranted;
 
   return (
-    <div className='my-4 flex flex-col md:flex-row  gap-2'>
+    <div className=' flex flex-col md:flex-row  gap-2'>
       <div className='w-full'>
-        <h1 className='subheading mb-2'>Welcome back {user?.given_name}</h1>
+        <h1 className='subheading mb-2'>Welcome back {user?.given_name},</h1>
         <p>
           Here you can see ask permission for managing tickets, with your
           current permission, you are not allowed to edit or create a new ticket
