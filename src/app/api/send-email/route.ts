@@ -12,13 +12,13 @@ const transporter = nodemailer.createTransport({
 
 export async function POST(req: Request) {
   try {
-    const { email } = await req.json();
+    const { email, subject, description } = await req.json();
 
     const mailOptions: Options = {
       from: email,
       to: process.env.EMAIL_USER,
-      subject: 'Request Access permission',
-      text: 'This is a test email from your application',
+      subject,
+      text: description,
     };
 
     await transporter.sendMail(mailOptions);

@@ -23,7 +23,7 @@ const UserPage: NextPage = async () => {
       </div>
       <div className='w-full'>
         {isManager ? (
-          <p>You have full authorization</p>
+          <p className='paragpraph'>You have full authorization</p>
         ) : (
           <RequestPermissionForm user={user} />
         )}

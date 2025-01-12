@@ -15,6 +15,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoaderCircle } from 'lucide-react';
+import { toast } from 'sonner';
 type Props = {
   user: KindeUser<Record<string, unknown>>;
 };
@@ -45,6 +46,7 @@ const RequestPermissionForm = ({ user }: Props) => {
 
   const requestPermission = async (e: UserFormProps) => {
     try {
+      console.log(e);
       const response = await fetch('/api/send-email', {
         method: 'POST',
         headers: {
@@ -59,8 +61,28 @@ const RequestPermissionForm = ({ user }: Props) => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      const data = await response.json();
-      console.log(data);
+      if (response.status === 200) {
+        toast.success('Your request has been sent!', {
+          description: 'We will get back to you as soon as possible',
+          className: 'flex items-center w-full ',
+          closeButton: true,
+          classNames: {
+            closeButton: 'toast-close-btn',
+          },
+          cancel: (
+            <Button
+              onClick={() => toast.dismiss()}
+              className='absolute bottom-1 right-1'
+              size={'sm'}
+              variant={'ghost'}
+            >
+              Dismiss
+            </Button>
+          ),
+
+          richColors: true,
+        });
+      }
     } catch (error) {
       console.log(error);
     }
