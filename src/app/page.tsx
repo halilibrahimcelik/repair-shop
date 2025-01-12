@@ -9,7 +9,7 @@ export default function Home() {
     <div className=' aspect-square object-cover bg-center bg-cover h-screen w-screen bg-home-img '>
       <main className='flex  items-center justify-center w-full h-full'>
         <Card className='p-6 flex flex-col gap-2'>
-          <h1 className='heading'>
+          <h1 className='heading my-4'>
             {' '}
             Peckham&apos;s <br /> Repair Shop{' '}
           </h1>
