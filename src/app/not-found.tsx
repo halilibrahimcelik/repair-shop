@@ -21,7 +21,7 @@ export default function NotFound() {
           className='rounded-lg'
         />
         <Button asChild>
-          <Link href='/'>Return Home</Link>
+          <Link href='/'>Return Home </Link>
         </Button>
       </Card>
     </div>

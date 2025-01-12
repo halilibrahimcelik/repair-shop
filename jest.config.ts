@@ -10,12 +10,28 @@ const createJestConfig = nextJest({
 const config: Config = {
   coverageProvider: 'v8',
 
-  testEnvironment: 'jsdom',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   // Add more setup options before each test is run
-  // setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+  preset: 'ts-jest',
+  transform: {
+    '^.+\\.(ts|tsx)$': [
+      'ts-jest',
+      {
+        useESM: true,
+      },
+    ],
+    '^.+\\.(js|jsx)$': [
+      'babel-jest',
+      {
+        presets: ['@babel/preset-env', '@babel/preset-react'],
+      },
+    ],
+  },
+  testEnvironment: 'jest-environment-jsdom',
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

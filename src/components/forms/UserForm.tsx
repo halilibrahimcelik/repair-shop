@@ -16,28 +16,6 @@ type UserFormProps = {
   phone_number?: string | null;
 };
 const UserForm: React.FC<Props> = ({ user, accessToken }) => {
-  //   const updateUser = async (data: UserFormProps) => {
-  //     try {
-  //       fetch(
-  //         `${process.env.NEXT_PUBLIC_KINDE_DOMAIN}/api/v1/user?id=${user.id}`,
-  //         {
-  //           method: 'PATCH',
-  //           headers: {
-  //             'Content-Type': 'application/json',
-  //             Authorization: `Bearer ${accessToken}`,
-  //           },
-  //           body: JSON.stringify({
-  //             data,
-  //           }),
-  //         }
-  //       );
-  //     } catch (error) {
-  //       if (error instanceof Error) {
-  //         console.error(error.message);
-  //       }
-  //     }
-  //   };
-
   const updateUser = async (data: UserFormProps) => {
     try {
       const response = await fetch('/api/user/patch', {

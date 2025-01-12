@@ -138,7 +138,6 @@ const TicketFormPage: React.FC<Props> = async ({ searchParams }) => {
               techs={techs}
               isManager={isManager}
             />
-            <BackButton title='Back' size='default' variants='default' />
           </div>
         );
       } else {

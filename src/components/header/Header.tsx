@@ -28,7 +28,7 @@ const Header = ({ user }: Props) => {
         <div className='flex items-center gap-2'>
           <NavButton label='Home' Icon={HomeIcon} href='/' />
           <Link
-            href={ROUTES.HOME}
+            href={'/'}
             className='flex justify-center items-center gap-2 ml-0'
             title='Home'
           >
@@ -40,16 +40,14 @@ const Header = ({ user }: Props) => {
 
         <div className='flex items-center gap-1'>
           <Button title='profile' className='p-0 h-auto  rounded-full'>
-            <Link href={ROUTES.USER}>
-              <Avatar>
-                <AvatarImage src={user?.picture || ''} />
-                <AvatarFallback>
-                  {`${user?.given_name?.charAt(0)} ${user?.family_name?.charAt(
-                    0
-                  )}`}{' '}
-                </AvatarFallback>
-              </Avatar>
-            </Link>
+            <Avatar title='profile'>
+              <AvatarImage src={user?.picture || ''} />
+              <AvatarFallback>
+                {`${user?.given_name?.charAt(0)} ${user?.family_name?.charAt(
+                  0
+                )}`}{' '}
+              </AvatarFallback>
+            </Avatar>
           </Button>
 
           <NavButton label='Tickets' Icon={File} href={ROUTES.TICKETS} />
