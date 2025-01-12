@@ -20,22 +20,31 @@ type Props = {
 };
 type UserFormProps = {
   email: string | null;
+  subject: string | null;
+  description: string | null;
 };
 const RequestPermissionForm = ({ user }: Props) => {
   const formSchema = z.object({
     email: z.string().email(),
+    subject: z
+      .string()
+      .min(3, { message: 'Subject must be at least 3 characters long' }),
+    description: z
+      .string()
+      .min(10, { message: 'You must provide a  sensenble description' }),
   });
   const form = useForm<UserFormProps>({
     resolver: zodResolver(formSchema),
     mode: 'onSubmit',
     defaultValues: {
       email: user.email || '',
+      subject: '',
+      description: '',
     },
   });
 
   const requestPermission = async (e: UserFormProps) => {
     try {
-      console.log(e.email);
       const response = await fetch('/api/send-email', {
         method: 'POST',
         headers: {
@@ -43,6 +52,8 @@ const RequestPermissionForm = ({ user }: Props) => {
         },
         body: JSON.stringify({
           email: e.email,
+          subject: e.subject,
+          description: e.description,
         }),
       });
       if (!response.ok) {
@@ -54,10 +65,12 @@ const RequestPermissionForm = ({ user }: Props) => {
       console.log(error);
     }
   };
-  console.log(form.formState.isSubmitting);
   return (
     <Form {...form}>
-      <form className=' ' onSubmit={form.handleSubmit(requestPermission)}>
+      <form
+        className='flex flex-col gap-3 '
+        onSubmit={form.handleSubmit(requestPermission)}
+      >
         <FormField
           name='email'
           render={({ field }) => (
@@ -66,7 +79,31 @@ const RequestPermissionForm = ({ user }: Props) => {
               <FormControl>
                 <Input {...field} />
               </FormControl>
-              <FormMessage />
+              <FormMessage withIcon />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name='subject'
+          render={({ field }) => (
+            <FormItem className='max-w-md'>
+              <FormLabel>Subject</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage withIcon />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name='description'
+          render={({ field }) => (
+            <FormItem className='max-w-md'>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage withIcon />
             </FormItem>
           )}
         />

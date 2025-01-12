@@ -13,17 +13,21 @@ const UserPage: NextPage = async () => {
   const isManager = role?.isGranted;
 
   return (
-    <div className='my-4 flex flex-col gap-2'>
-      <h1 className='subheading'>Welcome back {user?.given_name}</h1>
-      <p>
-        Here you can see ask permission for managing tickets, with your current
-        permission, you are not allowed to edit or create a new ticket
-      </p>
-      {isManager ? (
-        <p>You have full authorization</p>
-      ) : (
-        <RequestPermissionForm user={user} />
-      )}
+    <div className='my-4 flex flex-col md:flex-row  gap-2'>
+      <div className='w-full'>
+        <h1 className='subheading mb-2'>Welcome back {user?.given_name}</h1>
+        <p>
+          Here you can see ask permission for managing tickets, with your
+          current permission, you are not allowed to edit or create a new ticket
+        </p>
+      </div>
+      <div className='w-full'>
+        {isManager ? (
+          <p>You have full authorization</p>
+        ) : (
+          <RequestPermissionForm user={user} />
+        )}
+      </div>
 
       {/* <UserForm accessToken={accessToken} user={user} /> */}
     </div>
