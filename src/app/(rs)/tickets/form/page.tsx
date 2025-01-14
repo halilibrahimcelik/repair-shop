@@ -4,52 +4,31 @@ import { getTicket, getCustomer } from '@/lib/queries';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { Users, init as kindeInit } from '@kinde/management-api-js';
 import { Metadata } from 'next';
-// export async function generateMetadata({
-//   searchParams,
-// }: Props): Promise<Metadata> {
-//   // read route params
-//   const { customerId } = await searchParams;
-//   const customer = await getCustomer(parseInt(customerId!));
-//   if (customerId) {
-//     return {
-//       title: `Edit Customer ${customer?.firstName}`,
-//       description: `Edit Customer  ${customer?.firstName} | ${customer?.lastName}`,
-//     };
-//   } else {
-//     return {
-//       title: `New Customer`,
-//       description: `New Customer`,
-//     };
-//   }
-// }
 
-export async function generateMetaData({
+export async function generateMetadata({
   searchParams,
-}: Props): Promise<Metadata | undefined> {
-  try {
-    const { ticketId, customerId } = await searchParams;
+}: Props): Promise<Metadata> {
+  // read route params
+  const { customerId, ticketId } = await searchParams;
 
-    if (customerId) {
-      return {
-        title: `New Ticket Form for Customer ID# ${customerId}`,
-        description: `New Ticket Form for Customer ID# ${customerId}`,
-      };
-    }
-    if (ticketId) {
-      return {
-        title: `Edit Ticket Form for Ticket ID# ${ticketId}`,
-        description: `Edit Ticket Form for Ticket ID# ${ticketId}`,
-      };
-    }
+  if (customerId) {
+    const customer = await getCustomer(parseInt(customerId));
     return {
-      title: 'Ticket Form',
-      description: 'Ticket Form',
+      title: `New Ticket for ${customer?.firstName} ${customer?.lastName}`,
+      description: `New Ticket for ${customer?.firstName} ${customer?.lastName}`,
     };
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message);
-    }
-    return undefined;
+  } else if (!ticketId && !customerId) {
+    return {
+      title: `No Ticket ID`,
+      description: `No Ticket ID or Customer ID provided`,
+    };
+  } else {
+    const ticket = await getTicket(parseInt(ticketId!));
+
+    return {
+      title: `Edit Ticket for ${ticket?.title}`,
+      description: `Edit Ticket for  ${ticket?.title} | ${ticket?.description}`,
+    };
   }
 }
 type Props = {
