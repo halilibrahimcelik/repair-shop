@@ -3,22 +3,32 @@ import TicketsForm from '@/components/forms/TicketsForm';
 import { getTicket, getCustomer } from '@/lib/queries';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { Users, init as kindeInit } from '@kinde/management-api-js';
+import { Metadata } from 'next';
+// export async function generateMetadata({
+//   searchParams,
+// }: Props): Promise<Metadata> {
+//   // read route params
+//   const { customerId } = await searchParams;
+//   const customer = await getCustomer(parseInt(customerId!));
+//   if (customerId) {
+//     return {
+//       title: `Edit Customer ${customer?.firstName}`,
+//       description: `Edit Customer  ${customer?.firstName} | ${customer?.lastName}`,
+//     };
+//   } else {
+//     return {
+//       title: `New Customer`,
+//       description: `New Customer`,
+//     };
+//   }
+// }
+
 export async function generateMetaData({
   searchParams,
-}: {
-  searchParams: Promise<{
-    ticketId: string | undefined;
-    customerId: string | undefined;
-  }>;
-}) {
+}: Props): Promise<Metadata | undefined> {
   try {
     const { ticketId, customerId } = await searchParams;
-    if (!ticketId && !customerId) {
-      return {
-        title: 'Missin Ticket ID and customer ID',
-        description: 'Missin Ticket ID and customer ID',
-      };
-    }
+
     if (customerId) {
       return {
         title: `New Ticket Form for Customer ID# ${customerId}`,
@@ -31,10 +41,15 @@ export async function generateMetaData({
         description: `Edit Ticket Form for Ticket ID# ${ticketId}`,
       };
     }
+    return {
+      title: 'Ticket Form',
+      description: 'Ticket Form',
+    };
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
     }
+    return undefined;
   }
 }
 type Props = {
