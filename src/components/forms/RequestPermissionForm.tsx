@@ -39,7 +39,7 @@ const RequestPermissionForm = ({ user }: Props) => {
     resolver: zodResolver(formSchema),
     mode: 'onSubmit',
     defaultValues: {
-      email: user.email || '',
+      email: user?.email || '',
       subject: 'Authorization request',
       description: '',
     },

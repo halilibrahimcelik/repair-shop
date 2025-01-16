@@ -1,13 +1,14 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { NextPage } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export const metadata = {
-  title: 'Not Found',
-  description: 'Page not found',
-};
-export default function NotFound() {
+// export const metadata = {
+//   title: 'Not Found',
+//   description: 'Page not found',
+// };
+const NotFound: NextPage = () => {
   return (
     <div className='mx-auto px-10 py-10 flex justify-center'>
       <Card className=' flex flex-col gap-4 justify-center items-center w- p-4 '>
@@ -26,4 +27,6 @@ export default function NotFound() {
       </Card>
     </div>
   );
-}
+};
+
+export default NotFound;
