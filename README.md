@@ -70,10 +70,5 @@ git clone https://github.com/yourusername/repair-shop-dashboard.git
 pnpm install
 
 # Setup environment variables
-cp .env.example .env
 
-# Setup database
-pnpm db:push
 
-# Start development server
-```
