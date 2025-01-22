@@ -16,6 +16,8 @@ export function useGetSearchedCustomers(param: string) {
 export function useGetAllCustomers() {
   return useQuery({
     queryKey: ['get-all-customers'],
-    queryFn: async () => await getAllCustomers(),
+    queryFn: async () => {
+      return (await getAllCustomers()) || [];
+    },
   });
 }

@@ -38,7 +38,7 @@ export const getTicket = async (id: number) => {
 export const getAllCustomers = async () => {
   try {
     const customers = await db.select().from(customersTable);
-    return customers;
+    return customers || [];
   } catch (error) {
     if (error instanceof Error) {
       console.log(error);

@@ -2,35 +2,18 @@ import React from 'react';
 export * from '@testing-library/react';
 import { render as defaultRender } from '@testing-library/react';
 import { NextRouter } from 'next/router';
-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
+
+// Define the type for render options
 type DefaultParams = Parameters<typeof defaultRender>;
 type RenderUI = DefaultParams[0];
 type RenderOptions = DefaultParams[1] & { router?: Partial<NextRouter> };
-const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
-  const queryClient = new QueryClient();
 
-  return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
-};
+// Create a QueryClient instance
+const queryClient = new QueryClient();
 
-export function render(
-  ui: RenderUI,
-  { wrapper, router, ...options }: RenderOptions = {}
-) {
-  if (!wrapper) {
-    wrapper = ({ children }) => (
-      <RouterContext.Provider value={{ ...mockRouter, ...router }}>
-        <AllTheProviders>{children}</AllTheProviders>
-      </RouterContext.Provider>
-    );
-  }
-
-  return defaultRender(ui, { wrapper, ...options });
-}
-
+// Mock Next.js router
 const mockRouter: NextRouter = {
   basePath: '',
   pathname: '/',
@@ -54,3 +37,17 @@ const mockRouter: NextRouter = {
   isReady: true,
   forward: jest.fn(),
 };
+
+// Custom render function
+export function render(
+  ui: RenderUI,
+  { router, ...options }: RenderOptions = {}
+) {
+  const wrapper = ({ children }: { children: React.ReactNode }) => (
+    <RouterContext.Provider value={{ ...mockRouter, ...router }}>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </RouterContext.Provider>
+  );
+
+  return defaultRender(ui, { wrapper, ...options });
+}
