@@ -15,7 +15,7 @@ type Props = {
 };
 const TableSkeleton: React.FC<Props> = ({ headersArray, rowArray }) => {
   return (
-    <div>
+    <div data-testid='skeleton'>
       <Table className='w-full'>
         <TableHeader className='rounded-tl-lg overflow-hidden'>
           <TableRow>

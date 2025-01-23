@@ -1,0 +1,36 @@
+import { Customer } from '@/db/schema';
+
+export const MOCK_CUSTOMERS: Customer[] = [
+  {
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'john.doe@example.com',
+    phone: '123-456-7890',
+    address1: '123 Main St',
+    city: 'Anytown',
+    state: 'CA',
+    postCode: '12345',
+    id: 1,
+    address2: null,
+    notes: 'Some notes',
+    active: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    firstName: 'Jane',
+    lastName: 'Max',
+    email: 'max.jane@example.com',
+    phone: '123-456-7890',
+    address1: '123 Main St',
+    city: 'London',
+    state: 'CA',
+    postCode: '12345',
+    id: 2,
+    address2: null,
+    notes: 'Some notes',
+    active: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+];
