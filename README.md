@@ -27,6 +27,7 @@ This application replaces traditional sticky note systems with a digital solutio
 - [PostgreSQL](https://www.postgresql.org/) - Primary database
 - [Drizzle ORM](https://orm.drizzle.team/) - Type-safe ORM
 - [Next.js API Routes](https://nextjs.org/docs/api-routes/introduction) - Backend API
+- [Next-Safe-Actions](https://next-safe-action.dev/)- Used for Typesafe Server Actions
 
 ### Authentication & Security
 
